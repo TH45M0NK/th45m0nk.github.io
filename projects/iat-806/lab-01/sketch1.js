@@ -59,7 +59,7 @@ function draw() {
   line(a + b + b / 2, 0, a + b + b / 2, x); // #4
 
   // #horizontal_lines
-  line(0, a, x, a); // #1
+  line(0, a, x - 5.5 * a, a); // #1
   line(0, a + b, x, a + b); // #2
   line(a + b, a + (1.25 * b) / 3, x, a + (1.25 * b) / 3); // #3
   line(
