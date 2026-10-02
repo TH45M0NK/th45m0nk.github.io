@@ -39,7 +39,7 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player("yt-player", {
     height: "10",
     width: "10",
-    videoId: "QJJYpsA5tv8", // <-- Your YouTube Video ID
+    videoId: "QJJYpsA5tv8", // YouTube Video ID
     playerVars: {
       playsinline: 1,
       controls: 0,
