@@ -48,12 +48,12 @@ function mousePressed() {
 let player;
 let isPlayerReady = false;
 
-// youtybe api
+// youtube api
 function onYouTubeIframeAPIReady() {
   player = new YT.Player("yt-player", {
     height: "10",
     width: "10",
-    videoId: "-DuAAmHpGbw", // <-- Put your YouTube Video ID here
+    videoId: "QJJYpsA5tv8", // <-- Your YouTube Video ID
     playerVars: {
       playsinline: 1,
       controls: 0,
@@ -63,13 +63,14 @@ function onYouTubeIframeAPIReady() {
     events: {
       onReady: (event) => {
         isPlayerReady = true;
-        event.target.setVolume(100); // Set volume 0-100
+        event.target.setVolume(100);
+        event.target.playVideo(); // <-- Added this back so it actually attempts to play on load!
       },
     },
   });
 }
 
-// stop the animation and the audio
+// stop the animation and the audio on click
 function mousePressed() {
   noLoop();
   if (isPlayerReady) {
@@ -77,7 +78,7 @@ function mousePressed() {
   }
 }
 
-// release everything
+// release everything to resume
 function mouseReleased() {
   loop(); // Restarts the p5.js draw loop
   if (isPlayerReady) {
