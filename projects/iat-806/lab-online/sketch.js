@@ -31,20 +31,6 @@ function draw() {
   }
 }
 
-function mousePressed() {
-  if (isPlaying) {
-    // STOP
-    noLoop(); // p5.js command to completely freeze the draw() animation loop
-    if (isPlayerReady) player.pauseVideo();
-    isPlaying = false;
-  } else {
-    // RESUME (Added just in case you want to click again to unfreeze it!)
-    loop(); // p5.js command to restart the draw() animation loop
-    if (isPlayerReady) player.playVideo();
-    isPlaying = true;
-  }
-}
-
 let player;
 let isPlayerReady = false;
 
@@ -53,7 +39,7 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player("yt-player", {
     height: "10",
     width: "10",
-    videoId: "-DuAAmHpGbw", // <-- Your YouTube Video ID
+    videoId: "QJJYpsA5tv8", // <-- Your YouTube Video ID
     playerVars: {
       playsinline: 1,
       controls: 0,
