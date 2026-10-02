@@ -63,7 +63,7 @@ function onYouTubeIframeAPIReady() {
     events: {
       onReady: (event) => {
         isPlayerReady = true;
-        event.target.playVideo(); // Attempts to auto-play on load
+        event.target.setVolume(100); // Set volume 0-100
       },
     },
   });
