@@ -16,7 +16,8 @@
 
     <!-- Your code. Keep this line last. -->
     <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="sketch.js"></script>
+    <script src="sketch.js" defer></script>
+    <!-- ADDED "defer" HERE -->
   </head>
   <body>
     <header>
@@ -31,10 +32,23 @@
       <a class="back" href="../index.html">&larr; IAT 806</a>
 
       <h1>Virtual Lab 01 — 8-bit Animation</h1>
-      <p class="tagline">Ken Kaneki's transformation</p>
+      <p class="tagline">Tokyo Ghoul's 8-bit Journey</p>
 
-      <h2>Kaneki's 8-bit Transformation</h2>
-      <div id="sketch-holder"></div>
+      <h2>Tokyo Ghoul's 8-bit Journey</h2>
+      <div
+        style="
+          display: flex;
+          gap: 32px;
+          justify-content: left;
+          align-items: center;
+        "
+      >
+        <!-- Left Canvas Box -->
+        <div id="sketch1"></div>
+
+        <!-- Right Canvas Box -->
+        <div id="sketch2"></div>
+      </div>
       <!-- hidden youtube player -->
       <div style="position: absolute; top: -9999px; left: -9999px; opacity: 0">
         <div id="yt-player-kaneki"></div>
