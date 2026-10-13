@@ -3,6 +3,26 @@ const DEBUG = true;
 
 const FRAME_COUNT = 8;
 
+// ---- Menu look (edit these to tweak the menus) ----
+const MENU_FONT = "'Press Start 2P', monospace";
+const MENU_TEXT_SIZE = 22; // one size for every menu label
+const BTN_W = 256; // black rectangle width
+const BTN_H = 32; // black rectangle height
+
+// y = vertical centre of each button on the 384 x 512 canvas
+const MAIN_BUTTONS = [
+  { label: "disparity", y: 200 },
+  { label: "graveyard", y: 300 },
+];
+
+// Order matters: button 1 -> character 1, button 2 -> character 2, and so on
+const CHAR_BUTTONS = [
+  { label: "kolah-ghermezi", y: 150 },
+  { label: "pesar-khaleh", y: 250 },
+  { label: "sarvenaz", y: 350 },
+  { label: "all out crazy", y: 450 },
+];
+
 let bgImage = null;
 let disparityVid;
 let graveyardVid;
@@ -24,7 +44,7 @@ let selectedCharacter = null; // Will store 1, 2, 3, or 4
 
 // Animation logic variables
 let animFrame = 0; // Keeps track of the current frame (0 to 7.99)
-let animSpeed = 0.05; // Adjust this to make the animation faster or slower
+let animSpeed = 0.075; // Adjust this to make the animation faster or slower
 let charLoopCount = 0; // Counts how many times a character has fully animated
 let sequenceIndex = 1; // Tracks which character is active for Option 4 (1, 2, or 3)
 
@@ -141,66 +161,72 @@ function draw() {
   drawDebugNote();
 }
 
-function drawMainMenu() {
+// ---- Menu helpers (shared by both menus) ----
+
+// menu.png behind the menu, or dark blue if the image didn't load
+function drawMenuBackground() {
   if (bgImage) {
     image(bgImage, 0, 0, width, height);
   } else {
-    background(0);
+    background(20, 20, 40);
   }
+}
 
-  textFont("'Press Start 2P', monospace");
-  textSize(20);
+// True when the mouse is inside a button's black rectangle (used for hover and clicks)
+function isOverButton(btn) {
+  return abs(mouseX - width / 2) < BTN_W / 2 && abs(mouseY - btn.y) < BTN_H / 2;
+}
 
-  // Draw "DISPARITY" button
-  if (mouseX > 50 && mouseX < 334 && mouseY > 180 && mouseY < 220) {
+// Black rectangle with the label on top; the label turns yellow on hover
+function drawButton(btn) {
+  push();
+  rectMode(CENTER);
+  noStroke();
+  fill(0);
+  rect(width / 2, btn.y, BTN_W, BTN_H);
+
+  textFont(MENU_FONT);
+  textSize(MENU_TEXT_SIZE);
+  textAlign(CENTER, CENTER);
+  if (isOverButton(btn)) {
     fill(255, 255, 0);
   } else {
     fill(255);
   }
-  text("disparity", width / 2, 200);
+  text(btn.label, width / 2, btn.y);
+  pop();
+}
 
-  // Draw "GRAVEYARD" button
-  if (mouseX > 50 && mouseX < 334 && mouseY > 280 && mouseY < 320) {
-    fill(255, 255, 0);
-  } else {
-    fill(255);
+// Black panel holding the heading text (one string per line)
+function drawHeading(lines, centreY) {
+  const lineH = MENU_TEXT_SIZE + 10;
+  const panelH = lines.length * lineH + 20;
+
+  push();
+  rectMode(CENTER);
+  noStroke();
+  fill(0);
+  rect(width / 2, centreY, BTN_W, panelH);
+
+  textFont(MENU_FONT);
+  textSize(MENU_TEXT_SIZE);
+  textAlign(CENTER, CENTER);
+  fill(255);
+  for (let i = 0; i < lines.length; i++) {
+    text(lines[i], width / 2, centreY - panelH / 2 + 10 + lineH * (i + 0.5));
   }
-  text("graveyard", width / 2, 300);
+  pop();
+}
+
+function drawMainMenu() {
+  drawMenuBackground();
+  MAIN_BUTTONS.forEach((btn) => drawButton(btn));
 }
 
 function drawCharMenu() {
-  background(20, 20, 40); // Dark blue background for the character menu
-
-  textFont("'Press Start 2P', monospace");
-  fill(255);
-  textSize(14); // Smaller text so the long names fit on the canvas
-  text("Choose Character:", width / 2, 50);
-
-  textSize(12);
-
-  // Option 1: Kolah-Ghermezi
-  if (mouseX > 50 && mouseX < 334 && mouseY > 130 && mouseY < 170)
-    fill(255, 255, 0);
-  else fill(255);
-  text("1. kolah-ghermezi", width / 2, 150);
-
-  // Option 2: Pesar-Khaleh
-  if (mouseX > 50 && mouseX < 334 && mouseY > 230 && mouseY < 270)
-    fill(255, 255, 0);
-  else fill(255);
-  text("2. pesar-khaleh", width / 2, 250);
-
-  // Option 3: Sarvenaz
-  if (mouseX > 50 && mouseX < 334 && mouseY > 330 && mouseY < 370)
-    fill(255, 255, 0);
-  else fill(255);
-  text("3. sarvenaz", width / 2, 350);
-
-  // Option 4: Show All (Looping)
-  if (mouseX > 50 && mouseX < 334 && mouseY > 430 && mouseY < 470)
-    fill(255, 255, 0);
-  else fill(255);
-  text("4. loop all three", width / 2, 450);
+  drawMenuBackground();
+  drawHeading(["character", "selection:"], 60);
+  CHAR_BUTTONS.forEach((btn) => drawButton(btn));
 }
 
 function drawPlaying() {
@@ -258,27 +284,21 @@ function drawPlaying() {
 function mousePressed() {
   if (currentState === "MAIN_MENU") {
     // Select Video
-    if (mouseX > 50 && mouseX < 334 && mouseY > 180 && mouseY < 220) {
+    if (isOverButton(MAIN_BUTTONS[0])) {
       selectedVideo = disparityVid;
       currentState = "CHAR_MENU";
-    } else if (mouseX > 50 && mouseX < 334 && mouseY > 280 && mouseY < 320) {
+    } else if (isOverButton(MAIN_BUTTONS[1])) {
       selectedVideo = graveyardVid;
       currentState = "CHAR_MENU";
     }
   } else if (currentState === "CHAR_MENU") {
-    // Select Character
-    if (mouseX > 50 && mouseX < 334 && mouseY > 130 && mouseY < 170) {
-      selectedCharacter = 1;
-      startGame();
-    } else if (mouseX > 50 && mouseX < 334 && mouseY > 230 && mouseY < 270) {
-      selectedCharacter = 2;
-      startGame();
-    } else if (mouseX > 50 && mouseX < 334 && mouseY > 330 && mouseY < 370) {
-      selectedCharacter = 3;
-      startGame();
-    } else if (mouseX > 50 && mouseX < 334 && mouseY > 430 && mouseY < 470) {
-      selectedCharacter = 4;
-      startGame();
+    // Select Character: button 1 -> 1, button 2 -> 2, button 3 -> 3, "all out crazy" -> 4
+    for (let i = 0; i < CHAR_BUTTONS.length; i++) {
+      if (isOverButton(CHAR_BUTTONS[i])) {
+        selectedCharacter = i + 1;
+        startGame();
+        break;
+      }
     }
   } else if (currentState === "PLAYING") {
     // Click anywhere to stop video and return to main menu
