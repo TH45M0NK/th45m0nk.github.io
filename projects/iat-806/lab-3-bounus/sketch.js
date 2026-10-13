@@ -1,4 +1,9 @@
-let bgImage;
+// Set to false once everything works to hide the on-canvas warnings
+const DEBUG = true;
+
+const FRAME_COUNT = 8;
+
+let bgImage = null;
 let disparityVid;
 let graveyardVid;
 
@@ -7,6 +12,11 @@ let kolahFrames = [];
 let pesarFrames = [];
 let sarvenazFrames = [];
 
+// Image loading bookkeeping
+let pendingImages = 0;
+let loadedImages = 0;
+let failedImages = [];
+
 // State and selection variables
 let currentState = "MAIN_MENU";
 let selectedVideo = null; // Will store either disparityVid or graveyardVid
@@ -14,41 +24,110 @@ let selectedCharacter = null; // Will store 1, 2, 3, or 4
 
 // Animation logic variables
 let animFrame = 0; // Keeps track of the current frame (0 to 7.99)
-let animSpeed = 0.2; // Adjust this to make the animation faster or slower
+let animSpeed = 0.05; // Adjust this to make the animation faster or slower
 let charLoopCount = 0; // Counts how many times a character has fully animated
 let sequenceIndex = 1; // Tracks which character is active for Option 4 (1, 2, or 3)
 
-function preload() {
-  // Load the background image (we will leave it in case it suddenly works!)
-  bgImage = loadImage("storage/menu.png");
-
-  // Load the 8 frames for all 3 characters
-  for (let i = 1; i <= 8; i++) {
-    kolahFrames.push(
-      loadImage(
-        "storage/characters/kolah-ghermezi/kolah-ghermezi-" + i + ".png",
-      ),
-    );
-    pesarFrames.push(
-      loadImage("storage/characters/pesar-khaleh/pesar-khaleh-" + i + ".png"),
-    );
-    sarvenazFrames.push(
-      loadImage("storage/characters/sarvenaz/sarvenaz-" + i + ".png"),
-    );
-  }
-}
+// NOTE: there is deliberately NO preload() here.
+// p5.js 2.x no longer calls preload(), so images loaded there silently never
+// arrive. Loading with callbacks in setup() works in both p5 1.x and 2.x.
 
 function setup() {
   let cnv = createCanvas(384, 512);
   cnv.parent("sketch-holder");
 
-  disparityVid = createVideo("storage/disparity.mp4");
-  graveyardVid = createVideo("storage/graveyard.mp4");
+  loadAllImages();
+
+  disparityVid = createVideo("files/disparity.mp4");
+  graveyardVid = createVideo("files/graveyard.mp4");
 
   disparityVid.hide();
   graveyardVid.hide();
 
   textAlign(CENTER, CENTER);
+}
+
+// Loads one image and reports success or failure (with the exact path) in the console
+function loadImg(path, onLoaded) {
+  pendingImages++;
+  loadImage(
+    path,
+    (img) => {
+      onLoaded(img);
+      loadedImages++;
+      imageSettled();
+    },
+    () => {
+      failedImages.push(path);
+      console.error("Could not load image: " + path);
+      imageSettled();
+    },
+  );
+}
+
+function imageSettled() {
+  pendingImages--;
+  if (pendingImages === 0) {
+    console.log(
+      "Images finished: " +
+        loadedImages +
+        " loaded, " +
+        failedImages.length +
+        " failed",
+    );
+    if (failedImages.length > 0) {
+      console.log(
+        "Check spelling, capital letters, and folder names for:\n" +
+          failedImages.join("\n"),
+      );
+    }
+  }
+}
+
+function loadAllImages() {
+  loadImg("files/menu.png", (img) => {
+    bgImage = img;
+  });
+
+  for (let i = 1; i <= FRAME_COUNT; i++) {
+    loadImg(
+      "files/characters/kolah-ghermezi/kolah-ghermezi-" + i + ".png",
+      (img) => {
+        kolahFrames[i - 1] = img;
+      },
+    );
+    loadImg(
+      "files/characters/pesar-khaleh/pesar-khaleh-" + i + ".png",
+      (img) => {
+        pesarFrames[i - 1] = img;
+      },
+    );
+    loadImg("files/characters/sarvenaz/sarvenaz-" + i + ".png", (img) => {
+      sarvenazFrames[i - 1] = img;
+    });
+  }
+}
+
+// Small red/white note in the corner so you can see loading problems on the canvas
+function drawDebugNote() {
+  if (!DEBUG) return;
+
+  let msg = null;
+  if (pendingImages > 0) {
+    msg = "Loading images... (" + pendingImages + " left)";
+  } else if (failedImages.length > 0) {
+    msg = failedImages.length + " image(s) failed - press F12 for the console";
+  }
+  if (!msg) return;
+
+  push();
+  textFont("monospace");
+  textSize(10);
+  textAlign(LEFT, BOTTOM);
+  noStroke();
+  fill(255, 80, 80);
+  text(msg, 6, height - 6);
+  pop();
 }
 
 function draw() {
@@ -59,10 +138,11 @@ function draw() {
   } else if (currentState === "PLAYING") {
     drawPlaying();
   }
+  drawDebugNote();
 }
 
 function drawMainMenu() {
-  if (bgImage && bgImage.width > 0) {
+  if (bgImage) {
     image(bgImage, 0, 0, width, height);
   } else {
     background(0);
@@ -130,6 +210,8 @@ function drawPlaying() {
   } else {
     background(0);
     fill(255);
+    textFont("monospace");
+    textSize(14);
     text("Loading video...", width / 2, height / 2);
   }
 
@@ -150,8 +232,7 @@ function drawPlaying() {
   let currentIntegerFrame = Math.floor(animFrame);
 
   if (framesToDraw && framesToDraw[currentIntegerFrame]) {
-    // This draws the character stretching to the canvas bounds.
-    // If the PNGs are transparent overlays, this works perfectly.
+    // Stretches the frame to the canvas bounds; transparent PNGs let the video show through.
     image(framesToDraw[currentIntegerFrame], 0, 0, width, height);
   }
 
@@ -159,7 +240,7 @@ function drawPlaying() {
   animFrame += animSpeed;
 
   // When a full 8-frame animation loop finishes:
-  if (animFrame >= 8) {
+  if (animFrame >= FRAME_COUNT) {
     animFrame = 0; // Reset to frame 1
 
     // If we are on Option 4, count loops and switch characters
