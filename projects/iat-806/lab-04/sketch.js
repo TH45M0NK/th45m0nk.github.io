@@ -5,15 +5,15 @@ let numFrames = 8;
 let numcol = 8;
 let numrows = 4;
 let gridMultiplier = 1;
-let minMultiplier = 1;
-let maxMultiplier = 8;
+let minMultiplier = 0.5;
+let maxMultiplier = 4;
 
 let speed = [];
 let colorOffset = [];
 
 const colorPalette = ["#9c4a4a", "#c9a227", "#e8e2d0", "#3a3530"];
 
-const SCALE_BOOST = 1.5; // bump this to tweak overall animation size
+const SCALE_BOOST = 1.2; // bump this to tweak overall animation size
 
 async function setup() {
   createCanvas(800, 400);
