@@ -1,203 +1,115 @@
-let bgImage;
-let disparityVid;
-let graveyardVid;
+const sketch1 = (p) => {
+  // sketch 1 - adjustments
+  let frames = [];
+  let numFrames = 8;
+  let a = 32; // safe margin
+  let centerx = 32 + a / 2;
+  let centery = 4 + a / 2;
 
-let currentState = "MENU";
-let isMenuLoaded = false;
+  p.setup = async () => {
+    p.createCanvas(256 + a, 256 + a);
+    for (let i = 0; i < numFrames; i++) {
+      frames.push(await p.loadImage(`Ken101-Frames/${i + 1}.png`));
+    }
+  };
 
-// Character arrays and variables
-let kolahFrames = [];
-let pesarFrames = [];
-let sarvenazFrames = [];
-let numFrames = 8;
+  p.draw = () => {
+    if (frames.length === 0) return;
 
-let selectedVideo = null;
-let selectedCharacter = null;
+    p.background(0, 0, 0);
+    p.fill(255);
 
-function preload() {
-  // Load the menu image
-  bgImage = loadImage("storage/menu.png", () => {
-    isMenuLoaded = true;
-  });
+    let speed = 10;
+    let slowFrame = p.floor(p.frameCount / speed);
+    let index = slowFrame % frames.length;
 
-  // Load all 24 character frames here.
-  // 24 small PNGs is completely safe and won't crash the browser!
-  for (let i = 0; i < numFrames; i++) {
-    kolahFrames.push(
-      loadImage(
-        `storage/characters/kolah-ghermezi/kolah-ghermezi-${i + 1}.png`,
-      ),
-    );
-    pesarFrames.push(
-      loadImage(`storage/characters/pesar-khaleh/pesar-khaleh-${i + 1}.png`),
-    );
-    sarvenazFrames.push(
-      loadImage(`storage/characters/sarvenaz/sarvenaz-${i + 1}.png`),
-    );
-  }
-}
+    p.image(frames[0], 0, 0);
 
-function setup() {
-  let cnv = createCanvas(384, 512);
-  cnv.parent("sketch-holder");
-
-  disparityVid = createVideo("storage/disparity.mp4");
-  graveyardVid = createVideo("storage/graveyard.mp4");
-
-  disparityVid.hide();
-  graveyardVid.hide();
-
-  textAlign(CENTER, CENTER);
-}
-
-function draw() {
-  if (currentState === "MENU") {
-    drawMenu();
-  } else if (currentState === "CHAR_MENU") {
-    drawCharMenu();
-  } else if (currentState === "PLAYING") {
-    drawPlaying();
-  }
-}
-
-function drawMenu() {
-  if (isMenuLoaded) {
-    image(bgImage, 0, 0, width, height);
-  } else {
-    background(0);
-  }
-
-  textFont("'Press Start 2P', monospace");
-  textSize(24);
-
-  // Draw "DISPARITY" button
-  if (mouseX > 100 && mouseX < 284 && mouseY > 180 && mouseY < 220) {
-    fill(255, 255, 0);
-  } else {
-    fill(255);
-  }
-  text("disparity", width / 2, 200);
-
-  // Draw "GRAVEYARD" button
-  if (mouseX > 100 && mouseX < 284 && mouseY > 280 && mouseY < 320) {
-    fill(255, 255, 0);
-  } else {
-    fill(255);
-  }
-  text("graveyard", width / 2, 300);
-}
-
-function drawCharMenu() {
-  background(20, 20, 40);
-
-  textFont("'Press Start 2P', monospace");
-  fill(255);
-  textSize(14);
-  text("Choose Character:", width / 2, 50);
-
-  textSize(12);
-
-  if (mouseX > 50 && mouseX < 334 && mouseY > 130 && mouseY < 170)
-    fill(255, 255, 0);
-  else fill(255);
-  text("1. kolah-ghermezi", width / 2, 150);
-
-  if (mouseX > 50 && mouseX < 334 && mouseY > 230 && mouseY < 270)
-    fill(255, 255, 0);
-  else fill(255);
-  text("2. pesar-khaleh", width / 2, 250);
-
-  if (mouseX > 50 && mouseX < 334 && mouseY > 330 && mouseY < 370)
-    fill(255, 255, 0);
-  else fill(255);
-  text("3. sarvenaz", width / 2, 350);
-
-  if (mouseX > 50 && mouseX < 334 && mouseY > 430 && mouseY < 470)
-    fill(255, 255, 0);
-  else fill(255);
-  text("4. loop all three", width / 2, 450);
-}
-
-function drawPlaying() {
-  // 1. Draw the background video
-  if (selectedVideo && selectedVideo.width > 0) {
-    image(selectedVideo, 0, 0, width, height);
-  } else {
-    background(0);
-    fill(255);
-    text("Loading video...", width / 2, height / 2);
-  }
-
-  // 2. YOUR ANIMATION TECHNIQUE
-  let speed = 10;
-  let slowFrame = floor(frameCount / speed);
-
-  // Find out which exact frame (0-7) to draw right now
-  let index = slowFrame % numFrames;
-  let framesToDraw = null;
-
-  if (selectedCharacter === 1) {
-    framesToDraw = kolahFrames;
-  } else if (selectedCharacter === 2) {
-    framesToDraw = pesarFrames;
-  } else if (selectedCharacter === 3) {
-    framesToDraw = sarvenazFrames;
-  } else if (selectedCharacter === 4) {
-    // Option 4 Logic:
-    // Total cycle is 48 frames (3 characters * 2 loops * 8 frames)
-    let cycleFrame = slowFrame % 48;
-
-    // Switch characters perfectly every 16 frames (2 loops)
-    if (cycleFrame < 16) {
-      framesToDraw = kolahFrames;
-    } else if (cycleFrame < 32) {
-      framesToDraw = pesarFrames;
+    if (index == 0) {
+      p.image(frames[0], centerx, centery);
     } else {
-      framesToDraw = sarvenazFrames;
+      p.image(frames[index], centerx, centery);
     }
-  }
+  };
+};
 
-  // 3. Draw the character overlay on top of the MP4
-  if (framesToDraw && framesToDraw[index]) {
-    image(framesToDraw[index], 0, 0, width, height);
-  }
+const sketch2 = (p) => {
+  // sketch 2 - adjustments
+  let frames2 = [];
+  let numFrames = 8;
+  let a = 32; // safe margin
+  let centerx = 32 + a / 2;
+  let centery = 4 + a / 2;
+
+  p.setup = async () => {
+    p.createCanvas(256 + a, 256 + a);
+    for (let i = 0; i < numFrames; i++) {
+      frames2.push(await p.loadImage(`Touka101-Frames/${i + 1}.png`));
+    }
+  };
+
+  p.draw = () => {
+    if (frames2.length === 0) return;
+
+    p.background(0, 0, 0);
+    p.fill(255);
+
+    let speed = 10;
+    let slowFrame = p.floor(p.frameCount / speed);
+    let index = slowFrame % frames2.length;
+
+    p.image(frames2[0], 0, 0);
+
+    if (index == 0) {
+      p.image(frames2[0], centerx, centery);
+    } else {
+      p.image(frames2[index], centerx, centery);
+    }
+  };
+};
+
+let p1 = new p5(sketch1, "sketch1");
+let p2 = new p5(sketch2, "sketch2");
+
+let player;
+let isPlayerReady = false;
+
+// youtube api
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player("yt-player-kaneki", {
+    height: "10",
+    width: "10",
+    videoId: "QJJYpsA5tv8", // YT id
+    playerVars: {
+      playsinline: 1,
+      controls: 0,
+      disablekb: 1,
+      autoplay: 1,
+    },
+    events: {
+      onReady: (event) => {
+        isPlayerReady = true;
+        event.target.setVolume(100);
+        event.target.playVideo(); // <-- play on the load!
+      },
+    },
+  });
 }
 
-function mousePressed() {
-  if (currentState === "MENU") {
-    if (mouseX > 100 && mouseX < 284 && mouseY > 180 && mouseY < 220) {
-      selectedVideo = disparityVid;
-      currentState = "CHAR_MENU";
-    } else if (mouseX > 100 && mouseX < 284 && mouseY > 280 && mouseY < 320) {
-      selectedVideo = graveyardVid;
-      currentState = "CHAR_MENU";
-    }
-  } else if (currentState === "CHAR_MENU") {
-    if (mouseX > 50 && mouseX < 334 && mouseY > 130 && mouseY < 170) {
-      selectedCharacter = 1;
-      startGame();
-    } else if (mouseX > 50 && mouseX < 334 && mouseY > 230 && mouseY < 270) {
-      selectedCharacter = 2;
-      startGame();
-    } else if (mouseX > 50 && mouseX < 334 && mouseY > 330 && mouseY < 370) {
-      selectedCharacter = 3;
-      startGame();
-    } else if (mouseX > 50 && mouseX < 334 && mouseY > 430 && mouseY < 470) {
-      selectedCharacter = 4;
-      startGame();
-    }
-  } else if (currentState === "PLAYING") {
-    currentState = "MENU";
-    selectedVideo.pause();
-    selectedVideo.time(0);
-    selectedVideo = null;
-    selectedCharacter = null;
+// stop the animation and the audio on click
+window.addEventListener("mousedown", () => {
+  p1.noLoop();
+  p2.noLoop();
+  if (isPlayerReady) {
+    player.pauseVideo(); // pause audio
   }
-}
+});
 
-function startGame() {
-  currentState = "PLAYING";
-  // Reset the frameCount so the animation always starts cleanly on frame 0
-  frameCount = 0;
-  selectedVideo.loop();
-}
+// release everything to resume
+window.addEventListener("mouseup", () => {
+  p1.loop();
+  p2.loop();
+  if (isPlayerReady) {
+    player.playVideo(); // resume audio
+  }
+});
