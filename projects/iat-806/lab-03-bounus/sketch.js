@@ -3,7 +3,7 @@ const DEBUG = true;
 
 const FRAME_COUNT = 8;
 
-// ---- Menu look (edit these to tweak the menus) ----
+// ---- menu look - UI (edit these to tweak the menus) ----
 const MENU_FONT = "'Press Start 2P', monospace";
 const MENU_TEXT_SIZE = 22; // one size for every menu label
 const BTN_W = 256; // black rectangle width
@@ -15,7 +15,7 @@ const MAIN_BUTTONS = [
   { label: "graveyard", y: 300 },
 ];
 
-// Order matters: button 1 -> character 1, button 2 -> character 2, and so on
+// order matters: button 1 -> character 1, button 2 -> character 2, and so on
 const CHAR_BUTTONS = [
   { label: "kolah-ghermezi", y: 150 },
   { label: "pesar-khaleh", y: 250 },
@@ -27,20 +27,20 @@ let bgImage = null;
 let disparityVid;
 let graveyardVid;
 
-// Arrays to hold the 8-frame image sequences
+// arrays to hold the 8-frame image sequences
 let kolahFrames = [];
 let pesarFrames = [];
 let sarvenazFrames = [];
 
-// Image loading bookkeeping
+// image loading bookkeeping - A.I assisted
 let pendingImages = 0;
 let loadedImages = 0;
 let failedImages = [];
 
-// State and selection variables
+// state and selection variables
 let currentState = "MAIN_MENU";
-let selectedVideo = null; // Will store either disparityVid or graveyardVid
-let selectedCharacter = null; // Will store 1, 2, 3, or 4
+let selectedVideo = null; // will store either disparityVid or graveyardVid
+let selectedCharacter = null; // will store 1, 2, 3, or 4
 
 // Animation logic variables
 let animFrame = 0; // Keeps track of the current frame (0 to 7.99)
@@ -48,8 +48,7 @@ let animSpeed = 0.075; // Adjust this to make the animation faster or slower
 let charLoopCount = 0; // Counts how many times a character has fully animated
 let sequenceIndex = 1; // Tracks which character is active for Option 4 (1, 2, or 3)
 
-// NOTE: there is deliberately NO preload() here.
-// p5.js 2.x no longer calls preload(), so images loaded there silently never
+// there is deliberately NO preload() here.
 // arrive. Loading with callbacks in setup() works in both p5 1.x and 2.x.
 
 function setup() {
