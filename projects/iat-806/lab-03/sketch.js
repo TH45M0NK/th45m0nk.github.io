@@ -1,85 +1,122 @@
 let frames = [];
 let numFrames = 8;
-let colWidth;
 let numcol = 8;
 let numrows = 4;
+let gridMultiplier = 1;
+let minMultiplier = 1;
+let maxMultiplier = 8; // safety cap so the grid can't explode in cell count
+
 let colors = [];
 let speed = [];
 
 async function setup() {
   createCanvas(800, 400);
-  nomCols = maps(mousex, 0, width, 1, 20);
-
-  for (let i = 0; i < numcol; i++) {
-    colors[i] = [];
-    speed[i] = [];
-    for (let j = 0; j < numrows; j++) {
-      colors[i][j] = [random(0, 255), 150, 200];
-      speed[i][j] = random(8, 20);
-    }
-  }
-
-  colWidth = width / numcol;
 
   for (let i = 0; i < numFrames; i++) {
     let fileName = "blossoms/Blossoms" + i + ".jpg";
     frames.push(await loadImage(fileName));
   }
+
+  regenerateGrid();
+}
+
+// (Re)builds colors/speed arrays to match the current effective grid size.
+// Called whenever gridMultiplier changes, and safe to call any time
+// numcol/numrows themselves get edited too.
+function regenerateGrid() {
+  let cols = numcol * gridMultiplier;
+  let rows = numrows * gridMultiplier;
+
+  colors = [];
+  speed = [];
+  for (let i = 0; i < cols; i++) {
+    colors[i] = [];
+    speed[i] = [];
+    for (let j = 0; j < rows; j++) {
+      colors[i][j] = [random(0, 255), 150, 200];
+      speed[i][j] = random(8, 20);
+    }
+  }
 }
 
 function draw() {
   background(120);
-  fill("black");
 
-  rect(0, 0, colWidth, height);
-  //fill(random(0, 255), 150, 200);
-  for (let i = 0; i < numcol; i++) {
-    for (let j = 0; j < numrows; j++) {
+  let cols = numcol * gridMultiplier;
+  let rows = numrows * gridMultiplier;
+  let colWidth = width / cols;
+  let rowHeight = height / rows;
+
+  // Defensive: if the grid size ever changes without regenerateGrid()
+  // being called, rebuild instead of indexing into missing cells.
+  if (colors.length !== cols || (colors[0] && colors[0].length !== rows)) {
+    regenerateGrid();
+  }
+
+  // Which cell is the mouse currently over?
+  let mouseCol = constrain(floor(mouseX / colWidth), 0, cols - 1);
+  let mouseRow = constrain(floor(mouseY / rowHeight), 0, rows - 1);
+
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
       fill(colors[i][j][0], colors[i][j][1], colors[i][j][2]);
-      rect(i * colWidth, j * colWidth, colWidth, colWidth);
+      rect(i * colWidth, j * rowHeight, colWidth, rowHeight);
+
+      // Grid distance (in cells) from this cell to the mouse's cell
+      let dist = max(abs(i - mouseCol), abs(j - mouseRow));
+
+      // Playback-rate multiplier based on that distance: center 4x,
+      // then 2x, 1x, 0.5x for each ring out
+      let rateMultiplier;
+      if (dist === 0) rateMultiplier = 4;
+      else if (dist === 1) rateMultiplier = 2;
+      else if (dist === 2) rateMultiplier = 1;
+      else rateMultiplier = 0.5;
+
+      // Lower "speed" value plays faster (frameCount / speed), so a
+      // higher rate means dividing the base speed, not multiplying it
+      let effectiveSpeed = speed[i][j] / rateMultiplier;
+
       animate(
         frames,
-        speed[i][j],
+        effectiveSpeed,
         i * colWidth,
-        j * colWidth,
+        j * rowHeight,
         colWidth,
-        colWidth,
+        rowHeight,
       );
     }
   }
-
-  let speed = 8;
-  let imageWidth = 100;
-  let imageHeight = 100;
-
-  // let slowFrame = floor(frameCount / speed);
-  // let index = slowFrame % frames.length;
-  // text(index, 500, 160);
-  // image(frames[index], 100, 100);
-
-  // speed = 7;
-  // slowFrame = floor(frameCount / speed);
-  // index = slowFrame % frames.length;
-  // text(index, 700, 200);
-  // image(frames[index], 300, 100);
-
-  function animate(frames, speed, xpostion, ypostion, imageWidth, imageHeight) {
-    let index = getFrameindex(speed);
-    let currentFrame = frames[index];
-    let origWidth = currentFrame.width;
-    let origHeight = currentFrame.height;
-    //text("origWidth: " + origWidth, 500, 100);
-    // text("origHeight: " + origHeight, 500, 120);
-    if (imageWidth && !imageHeight) {
-      let scale = imageWidth / origWidth;
-      imageHeight = origHeight * scale;
-    }
-    image(currentFrame, xpostion, ypostion, imageWidth, imageHeight);
-  }
 }
 
-function getFrameindex(speed) {
-  let slowFrame = Math.floor(frameCount / speed);
+function animate(frames, frameSpeed, xpos, ypos, cellWidth, cellHeight) {
+  let index = getFrameindex(frameSpeed);
+  let currentFrame = frames[index];
+  image(currentFrame, xpos, ypos, cellWidth, cellHeight);
+}
+
+function getFrameindex(frameSpeed) {
+  let slowFrame = Math.floor(frameCount / frameSpeed);
   let index = slowFrame % frames.length;
   return index;
+}
+
+function keyPressed() {
+  if (key === " ") {
+    if (keyIsDown(SHIFT)) {
+      gridMultiplier = constrain(
+        gridMultiplier / 2,
+        minMultiplier,
+        maxMultiplier,
+      );
+    } else {
+      gridMultiplier = constrain(
+        gridMultiplier * 2,
+        minMultiplier,
+        maxMultiplier,
+      );
+    }
+    regenerateGrid();
+    return false; // stop the browser from scrolling the page on Space
+  }
 }
