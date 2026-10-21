@@ -1,12 +1,17 @@
+p5.disableFriendlyErrors = true; // skip p5's per-call argument validation — big win at this scale
+
 let balls = [];
 let numberOfBalls = 9000;
 
 // Attraction point: starts at the center
 let attractX, attractY;
-let attractionRadius = 200; // How close the point needs to be to affect a ball
+let attractionRadius = 200;
 let moveStep = 5;
 
-// Track the physical state of the WASD keys
+// Remember the point's last position so we can tell when it actually moved
+let prevAttractX = null;
+let prevAttractY = null;
+
 let keys = {
   w: false,
   a: false,
@@ -17,7 +22,7 @@ let keys = {
 function setup() {
   createCanvas(512, 512);
   background(16);
-  noStroke(); // Improves performance
+  noStroke();
 
   attractX = width / 2;
   attractY = height / 2;
@@ -35,23 +40,34 @@ function setup() {
 function draw() {
   background(16);
 
-  // Move the attraction point based on our custom tracking object
-  if (keys.a) attractX -= moveStep; // Left
-  if (keys.d) attractX += moveStep; // Right
-  if (keys.w) attractY -= moveStep; // Up
-  if (keys.s) attractY += moveStep; // Down
+  if (keys.a) attractX -= moveStep;
+  if (keys.d) attractX += moveStep;
+  if (keys.w) attractY -= moveStep;
+  if (keys.s) attractY += moveStep;
 
   attractX = constrain(attractX, 0, width);
   attractY = constrain(attractY, 0, height);
 
+  // Only redo the distance/speed/color math when the point actually moved
+  let attractMoved = attractX !== prevAttractX || attractY !== prevAttractY;
+  if (attractMoved) {
+    for (let ball of balls) {
+      ball.updateAttraction();
+    }
+    prevAttractX = attractX;
+    prevAttractY = attractY;
+  }
+
   for (let ball of balls) {
     ball.change(random(1, 4));
   }
+
+  // Optional: watch actual fps in the console, basically free to leave on
+  if (frameCount % 30 === 0) console.log(Math.round(frameRate()) + " fps");
 }
 
-// p5.js native keyboard event functions
 function keyPressed() {
-  let k = key.toLowerCase(); // Automatically handles Caps Lock
+  let k = key.toLowerCase();
   if (k === "w") keys.w = true;
   if (k === "a") keys.a = true;
   if (k === "s") keys.s = true;
@@ -68,65 +84,71 @@ function keyReleased() {
 
 class Ball {
   constructor(x, y, c, r) {
-    // Save the original starting position so the ball has a "home" to return to
     this.baseX = x;
     this.baseY = y;
-
-    // Current position
     this.x = x;
     this.y = y;
     this.color = c;
     this.r = r;
+
+    // Cached, attraction-dependent values — computed by updateAttraction()
+    this.speedMultiplier = 1;
+    this.targetX = x;
+    this.targetY = y;
+    this.cr = 255;
+    this.cg = 221;
+    this.cb = 0;
+  }
+
+  // Recomputes everything that depends on the attraction point's position.
+  // Only called when that point has actually moved.
+  updateAttraction() {
+    let dx = attractX - this.baseX;
+    let dy = attractY - this.baseY;
+    let d = Math.sqrt(dx * dx + dy * dy);
+
+    let t = d / attractionRadius;
+    if (t > 1) t = 1; // d is never negative, so this replaces constrain(t, 0, 1)
+
+    this.speedMultiplier = 8 - 7.5 * t; // same as map(t, 0, 1, 8, 0.5)
+
+    if (d < attractionRadius) {
+      let pull = (1 - d / attractionRadius) * 0.8; // same as map(...) then *0.8
+      this.targetX = this.baseX + dx * pull;
+      this.targetY = this.baseY + dy * pull;
+    } else {
+      this.targetX = this.baseX;
+      this.targetY = this.baseY;
+    }
+
+    // Manual color lerp: R stays 255 the whole way, G and B rise toward 255
+    this.cg = 221 + (255 - 221) * t;
+    this.cb = 0 + 255 * t;
   }
 
   change(byHowMuch) {
-    // Measure distance from the ball's HOME to the attraction point
-    let d = dist(this.baseX, this.baseY, attractX, attractY);
-
-    // t goes from 0 (exactly on the point) to 1 (at the edge of the attraction radius)
-    let t = constrain(d / attractionRadius, 0, 1);
-
-    // Speed: 4x near the point, down to 0.5x outside the radius
-    let speedMultiplier = map(t, 0, 1, 8, 0.5);
-
     this.changeSize(byHowMuch);
-    this.move(byHowMuch * speedMultiplier, d, t);
-    this.show(t);
+    this.move(byHowMuch * this.speedMultiplier);
+    this.show();
   }
 
   changeSize(byHowMuch) {
     this.r += random(-byHowMuch, byHowMuch);
-    this.r = constrain(this.r, 0.75, 2.75);
+    if (this.r < 0.75) this.r = 0.75;
+    else if (this.r > 2.75) this.r = 2.75;
   }
 
-  move(jitterAmount, distanceToAttractor, t) {
-    // 1. Determine where the ball *wants* to be
-    let targetX = this.baseX;
-    let targetY = this.baseY;
+  move(jitterAmount) {
+    // Same as lerp(this.x, this.targetX, 0.1)
+    this.x += (this.targetX - this.x) * 0.1;
+    this.y += (this.targetY - this.y) * 0.1;
 
-    // If the ball is inside the attraction radius, pull its target towards the center
-    if (distanceToAttractor < attractionRadius) {
-      // Pull strength goes from 1 (center) to 0 (edge of radius)
-      let pull = map(distanceToAttractor, 0, attractionRadius, 1, 0);
-
-      // Pull the target towards the attract point (multiplied by 0.8 so they don't merge into a single pixel)
-      targetX = lerp(this.baseX, attractX, pull * 0.8);
-      targetY = lerp(this.baseY, attractY, pull * 0.8);
-    }
-
-    // 2. Smoothly glide the ball towards its target position
-    this.x = lerp(this.x, targetX, 0.1);
-    this.y = lerp(this.y, targetY, 0.1);
-
-    // 3. Add the scattered jitter on top
     this.x += random(-jitterAmount, jitterAmount);
     this.y += random(-jitterAmount, jitterAmount);
   }
 
-  show(t) {
-    // Color: yellow near the point, fading to white at the edge of the attraction radius
-    let c = lerpColor(color(255, 221, 0), color(255, 255, 255), t);
-    fill(c);
+  show() {
+    fill(this.cr, this.cg, this.cb);
     circle(this.x, this.y, this.r);
   }
 }
