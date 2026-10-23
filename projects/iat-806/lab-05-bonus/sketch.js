@@ -19,6 +19,27 @@ let keys = {
   d: false,
 };
 
+// Physical key codes -> our movement flags.
+// event.code is the physical key, so it's the same on press and release,
+// regardless of Shift, Caps Lock, or what other keys are held.
+const keyMap = { KeyW: "w", KeyA: "a", KeyS: "s", KeyD: "d" };
+
+window.addEventListener("keydown", (event) => {
+  if (event.repeat) return; // ignore the OS auto-repeat while a key is held
+  let k = keyMap[event.code];
+  if (k) keys[k] = true;
+});
+
+window.addEventListener("keyup", (event) => {
+  let k = keyMap[event.code];
+  if (k) keys[k] = false;
+});
+
+// If the window loses focus, the browser never sends the keyup — reset everything
+window.addEventListener("blur", () => {
+  keys.w = keys.a = keys.s = keys.d = false;
+});
+
 // --- Audio-reactive additions ---
 let song;
 let amp;
@@ -103,21 +124,21 @@ function draw() {
   if (frameCount % 30 === 0) console.log(Math.round(frameRate()) + " fps");
 }
 
-function keyPressed() {
-  let k = key.toLowerCase();
-  if (k === "w") keys.w = true;
-  if (k === "a") keys.a = true;
-  if (k === "s") keys.s = true;
-  if (k === "d") keys.d = true;
-}
+// function keyPressed() {
+//   let k = key.toLowerCase();
+//   if (k === "w") keys.w = true;
+//   if (k === "a") keys.a = true;
+//   if (k === "s") keys.s = true;
+//   if (k === "d") keys.d = true;
+// }
 
-function keyReleased() {
-  let k = key.toLowerCase();
-  if (k === "w") keys.w = false;
-  if (k === "a") keys.a = false;
-  if (k === "s") keys.s = false;
-  if (k === "d") keys.d = false;
-}
+// function keyReleased() {
+//   let k = key.toLowerCase();
+//   if (k === "w") keys.w = false;
+//   if (k === "a") keys.a = false;
+//   if (k === "s") keys.s = false;
+//   if (k === "d") keys.d = false;
+// }
 
 // --- Audio-reactive additions ---
 function mousePressed() {
