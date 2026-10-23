@@ -3,12 +3,24 @@
    sizes. Every page on the site uses this one file.
    =========================================================== */
 
+/* Retro digital monospace fonts (loaded here so every page gets them) */
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap");
+
 :root {
   --ink: #fdfdfb; /* main text color */
   --muted: #6b6b76; /* quieter text */
   --accent: #f0db19; /* links and highlights */
-  --paper: #16161a; /* page background */
+  --hover: rgb(255, 170, 0); /* hover color for everything clickable */
+  --paper: #100e0a; /* page background */
   --line: #e4e4e0; /* borders */
+
+  --font-body: "Share Tech Mono", "Courier New", monospace;
+  --font-display: "VT323", "Courier New", monospace;
+
+  /* Layout: portrait column on the left, text column on the right.
+     Both scale with the browser width. */
+  --side: clamp(11rem, 30vw, 26rem); /* width of the portrait column */
+  --gap: clamp(1.5rem, 4vw, 3.5rem); /* space between the two columns */
 }
 
 * {
@@ -17,40 +29,109 @@
 
 body {
   margin: 0;
-  padding: 0 1.25rem 5rem;
+  padding: 0 1.25rem;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 18px;
-  line-height: 1.6;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+
+  /* Two-column grid: portrait | text. The whole grid stays centered.
+     The page is always exactly one screen tall (the home page proportion),
+     so the portrait is the same size on every page. Long content scrolls
+     inside the text column instead of stretching the page. */
+  display: grid;
+  grid-template-columns: var(--side) minmax(0, 44rem);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  column-gap: var(--gap);
+  justify-content: center;
+  height: 100vh;
+  height: 100dvh;
 }
 
-/* Keeps everything in a readable column in the middle of the page */
+/* Header and footer span both columns, so their dashed lines run across
+   the full width. */
 header,
-main,
 footer {
-  max-width: 44rem;
-  margin: 0 auto;
+  grid-column: 1 / -1;
+}
+
+header {
+  grid-row: 1;
+}
+
+main {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  min-height: 0;
+  padding: 2.5rem 1rem 4rem 0; /* space below the header line / above the footer line */
+
+  /* Content taller than the screen scrolls here, not the whole page */
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+}
+
+main::-webkit-scrollbar {
+  width: 6px;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: var(--muted);
+}
+
+main::-webkit-scrollbar-thumb:hover {
+  background: var(--hover);
+}
+
+footer {
+  grid-row: 3;
+  padding-left: calc(
+    var(--side) + var(--gap)
+  ); /* footer text lines up with the text column */
+}
+
+/* The 0/1 portrait. It fills the left column exactly between the
+   header line and the footer line, scaled to fit without distortion. */
+body::before {
+  content: "";
+  grid-column: 1;
+  grid-row: 2;
+  margin: 1.5rem 0;
+  background: url("storage/th45m0nk-portrait.svg") center top / contain
+    no-repeat;
+  pointer-events: none;
 }
 
 /* --- top navigation ---------------------------------------- */
 
+/* Three columns: empty | site name | nav. The two outer columns are
+   always equal, so the site name sits exactly in the center. */
 header {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: baseline;
-  gap: 0.5rem 1.5rem;
-  padding: 2rem 0 1.5rem;
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 2.5rem;
+  column-gap: 1.5rem;
+  padding-top: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px dashed var(--line);
 }
 
 header .site-name {
-  font-size: 1.15rem;
-  font-weight: 700;
+  grid-column: 2;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: 0.05em;
   text-decoration: none;
   color: var(--ink);
-  margin-right: auto;
+}
+
+header nav {
+  grid-column: 3;
+  justify-self: end;
+  text-align: right;
 }
 
 header nav a {
@@ -59,31 +140,62 @@ header nav a {
   margin-left: 1.25rem;
 }
 
-header nav a:hover {
-  color: var(--accent);
+header nav a:first-child {
+  margin-left: 0;
 }
 
 /* --- text --------------------------------------------------- */
 
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+}
+
 h1 {
-  font-size: 2.1rem;
-  line-height: 1.2;
+  font-size: 3rem;
+  line-height: 1.05;
   margin: 0 0 0.5rem;
 }
 
 h2 {
-  font-size: 1.3rem;
+  font-size: 1.9rem;
+  line-height: 1.1;
   margin: 2.5rem 0 0.75rem;
 }
 
 .tagline {
   color: var(--muted);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   margin: 0 0 2rem;
 }
 
 a {
   color: var(--accent);
+}
+
+/* --- hover on everything clickable -------------------------- */
+
+a,
+button,
+.card-list li {
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+a:hover,
+header .site-name:hover,
+header nav a:hover,
+button:hover {
+  color: var(--hover);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 1px dashed var(--hover);
+  outline-offset: 3px;
 }
 
 /* --- the list of links on the projects pages ----------------- */
@@ -95,14 +207,13 @@ a {
 }
 
 .card-list li {
-  border: 1px solid var(--line);
-  border-radius: 10px;
+  border: 1px dashed var(--line);
+  border-radius: 0;
   margin-bottom: 0.9rem;
-  transition: border-color 0.15s ease;
 }
 
 .card-list li:hover {
-  border-color: var(--accent);
+  border-color: var(--hover);
 }
 
 .card-list a {
@@ -116,6 +227,11 @@ a {
   font-weight: 700;
   color: var(--accent);
   display: block;
+  transition: color 0.15s ease;
+}
+
+.card-list li:hover .title {
+  color: var(--hover);
 }
 
 .card-list .description {
@@ -133,20 +249,128 @@ a {
   font-size: 0.95rem;
 }
 
-.back:hover {
-  color: var(--accent);
+canvas,
+img {
+  max-width: 100%;
+  height: auto !important; /* keeps sketches and images in proportion when they shrink on phones */
 }
 
-canvas {
-  max-width: 100%;
+/* --- project pages (the end of the site tree) ----------------- */
+/* Any page with a p5 sketch holder (or <body class="project">) drops
+   the portrait, centers a single column, and scrolls normally. */
+
+body:is(.project, :has([id^="sketch-holder"])) {
+  /* Same overall width as the other pages, so the header and footer
+     lines match everywhere; the content column sits in the middle. */
+  grid-template-columns: minmax(0, calc(var(--side) + var(--gap) + 44rem));
+  grid-template-rows: auto 1fr auto;
+  height: auto;
+  min-height: 100vh;
+}
+
+body:is(.project, :has([id^="sketch-holder"]))::before {
+  display: none;
+}
+
+body:is(.project, :has([id^="sketch-holder"])) :is(header, main, footer) {
+  grid-column: 1;
+}
+
+body:is(.project, :has([id^="sketch-holder"])) main {
+  justify-self: center;
+  width: 100%;
+  max-width: 44rem;
+  overflow: visible;
+  padding-right: 0;
+}
+
+body:is(.project, :has([id^="sketch-holder"])) footer {
+  padding-left: max(
+    0px,
+    calc((100% - 44rem) / 2)
+  ); /* footer text lines up with the centered column */
+}
+
+body:is(.project, :has([id^="sketch-holder"])) canvas {
+  display: block;
+  margin: 0 auto;
 }
 
 /* --- footer -------------------------------------------------- */
 
 footer {
-  margin-top: 4rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-top: 1px dashed var(--line);
   color: var(--muted);
   font-size: 0.9rem;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* --- phones and narrow windows ------------------------------- */
+/* One column, normal page scrolling. The portrait becomes a strip
+   between the header line and the content. */
+
+@media (max-width: 52rem) {
+  body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr auto;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  header {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    row-gap: 0.75rem;
+  }
+
+  header .site-name,
+  header nav {
+    grid-column: 1;
+    justify-self: center;
+    text-align: center;
+  }
+
+  header,
+  footer {
+    grid-column: 1;
+  }
+
+  footer {
+    padding-left: 0;
+  }
+
+  body::before {
+    grid-row: 2;
+    height: 16rem;
+    margin: 1.5rem 0 0;
+    background-position: center;
+  }
+
+  main {
+    grid-column: 1;
+    grid-row: 3;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  footer {
+    grid-row: 4;
+  }
+
+  body:is(.project, :has([id^="sketch-holder"])) {
+    grid-template-rows: auto 1fr auto;
+  }
+
+  body:is(.project, :has([id^="sketch-holder"])) main {
+    grid-row: 2;
+  }
+
+  body:is(.project, :has([id^="sketch-holder"])) footer {
+    grid-row: 3;
+  }
 }
