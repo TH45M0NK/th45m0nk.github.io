@@ -19,7 +19,19 @@ let keys = {
   d: false,
 };
 
-function setup() {
+// --- Audio-reactive additions ---
+let song;
+let amp;
+let ripples = [];
+
+let avgLevel = 0; // running average of the volume
+let beatThreshold = 1.4; // how far above average counts as a beat (lower = more ripples)
+let minLevel = 0.05; // ignore near-silence
+let beatCooldown = 15; // minimum frames between ripples
+let lastBeatFrame = -100;
+// --- end audio-reactive additions ---
+
+async function setup() {
   createCanvas(512, 512);
   background(16);
   noStroke();
@@ -35,6 +47,19 @@ function setup() {
     let ball = new Ball(ballX, ballY, BallColor, BallR);
     balls.push(ball);
   }
+
+  // --- Audio-reactive additions ---
+  // p5 2.x: load inside async setup() with await (preload() no longer exists)
+  try {
+    song = await loadSound("Pink Floyd - Any Colour You Like.mp3");
+    console.log("Song loaded OK");
+
+    amp = new p5.Amplitude();
+    amp.setInput(song);
+  } catch (err) {
+    console.error("Song FAILED to load:", err);
+  }
+  // --- end audio-reactive additions ---
 }
 
 function draw() {
@@ -62,6 +87,18 @@ function draw() {
     ball.change(random(1, 4));
   }
 
+  // --- Audio-reactive additions ---
+  detectBeat();
+
+  for (let i = ripples.length - 1; i >= 0; i--) {
+    ripples[i].update();
+    ripples[i].show();
+    if (ripples[i].isDone()) {
+      ripples.splice(i, 1);
+    }
+  }
+  // --- end audio-reactive additions ---
+
   // Optional: watch actual fps in the console, basically free to leave on
   if (frameCount % 30 === 0) console.log(Math.round(frameRate()) + " fps");
 }
@@ -81,6 +118,67 @@ function keyReleased() {
   if (k === "s") keys.s = false;
   if (k === "d") keys.d = false;
 }
+
+// --- Audio-reactive additions ---
+function mousePressed() {
+  if (!song) return; // song hasn't loaded (or failed) — don't crash
+
+  // Browsers block audio until the user interacts with the page,
+  // so the first click starts the music; later clicks toggle play/pause
+  if (song.isPlaying()) {
+    song.pause();
+  } else {
+    if (typeof userStartAudio === "function") userStartAudio();
+    song.play();
+  }
+}
+
+function detectBeat() {
+  if (!amp || !song || !song.isPlaying()) return;
+
+  let level = amp.getLevel();
+
+  // A beat is a sudden jump above the recent average
+  if (
+    level > minLevel &&
+    level > avgLevel * beatThreshold &&
+    frameCount - lastBeatFrame > beatCooldown
+  ) {
+    ripples.push(new Ripple(attractX, attractY));
+    lastBeatFrame = frameCount;
+  }
+
+  // Slowly-updating running average
+  avgLevel = avgLevel * 0.95 + level * 0.05;
+}
+
+class Ripple {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.radius = 0;
+    this.alpha = 255;
+  }
+
+  update() {
+    this.radius += 6; // expansion speed
+    this.alpha -= 4; // fade speed
+  }
+
+  isDone() {
+    return this.alpha <= 0;
+  }
+
+  show() {
+    push();
+    noFill();
+    stroke(255, this.alpha);
+    strokeWeight(2);
+    circle(this.x, this.y, this.radius * 2);
+    pop();
+  }
+}
+// --- end audio-reactive additions ---
 
 class Ball {
   constructor(x, y, c, r) {
