@@ -218,48 +218,6 @@ body.cv-page footer {
   margin: 0;
 }
 
-.toefl {
-  margin: 1rem 0 0.5rem;
-  max-width: 24rem;
-}
-
-.toefl-total {
-  margin: 0;
-  padding: 0.2rem 0;
-  border: 1px dotted var(--line);
-  border-radius: 999px;
-  text-align: center;
-  color: var(--accent);
-  letter-spacing: 0.08em;
-}
-
-.cv ul.toefl-scores {
-  list-style: none;
-  padding: 0;
-  margin-top: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
-}
-
-.toefl-scores li {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.score {
-  display: grid;
-  place-items: center;
-  width: 2.8rem;
-  height: 2.8rem;
-  border: 1px dotted var(--line);
-  border-radius: 50%;
-  color: var(--accent);
-  font-size: 1.05rem;
-}
-
 /* --- skills: name + dotted bar ---------------------------------- */
 
 .cv ul.skill-list {
