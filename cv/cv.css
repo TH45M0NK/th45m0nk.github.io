@@ -1,0 +1,383 @@
+/* ===========================================================
+   CV pages only. Uses the colors and fonts from ../style.css.
+   =========================================================== */
+
+.cv-page {
+  --soft: color-mix(in srgb, var(--ink) 72%, var(--paper)); /* body text */
+  --dot: 0.5rem; /* timeline dot size */
+}
+
+/* Use the full site width (wider than a normal project page) */
+.cv-page main.cv {
+  max-width: none;
+  padding-top: 2rem;
+}
+
+.cv h1,
+.cv h2,
+.cv h3 {
+  text-transform: uppercase;
+}
+
+/* --- name card ------------------------------------------------ */
+
+.cv-hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: end;
+  gap: 1rem 1.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px dashed var(--line);
+}
+
+.cv-photo {
+  width: 7.5rem;
+  height: 7.5rem !important;
+  object-fit: cover;
+  border: 1px dashed var(--line);
+  padding: 3px;
+}
+
+.cv-id h1 {
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+  line-height: 0.9;
+  margin: 0;
+}
+
+.cv-role {
+  margin: 0.6rem 0 0;
+  color: var(--hover);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cv-contact {
+  margin: 0;
+  text-align: right;
+  color: var(--soft);
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.cv-handle {
+  display: block;
+  color: var(--ink);
+}
+
+/* --- two columns ---------------------------------------------- */
+
+.cv-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+}
+
+.cv-col {
+  min-width: 0;
+}
+
+.cv-col:first-child {
+  padding-right: 2.5rem;
+  border-right: 1px dashed var(--muted);
+}
+
+.cv-col:last-child {
+  padding-left: 2.5rem;
+}
+
+/* --- sections ------------------------------------------------- */
+
+.cv-section {
+  padding-top: 2rem;
+}
+
+.cv-section h2 {
+  font-size: 2.3rem;
+  margin: 0 0 0.75rem;
+}
+
+.cv-section h3 {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin: 1.25rem 0 0.5rem;
+}
+
+.cv-section h2 + h3 {
+  margin-top: 0;
+}
+
+.cv ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--soft);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.cv ul {
+  list-style-type: disc;
+}
+
+.cv ul li::marker {
+  color: var(--muted);
+}
+
+/* footer text lines up with the full-width CV */
+body.cv-page footer {
+  padding-left: 0;
+}
+
+.cv-muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* --- timeline: dates | dotted line | entry --------------------- */
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.timeline > li {
+  display: grid;
+  grid-template-columns: 5.25rem minmax(0, 1fr);
+}
+
+.when {
+  margin: 0;
+  padding: 0.15rem 0.9rem 0 0;
+  color: var(--hover);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  text-align: right;
+}
+
+.when span {
+  display: block;
+  white-space: nowrap;
+}
+
+.what {
+  position: relative;
+  padding: 0 0 1.25rem 1.1rem;
+  border-left: 1px dotted var(--hover);
+}
+
+.timeline > li:last-child .what {
+  padding-bottom: 0.25rem;
+}
+
+/* the dot on the line */
+.what::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--dot) / -2 - 0.5px);
+  top: 0.45rem;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  background: var(--hover);
+}
+
+.what h3 {
+  margin: 0 0 0.15rem;
+}
+
+.org {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+}
+
+/* --- languages ------------------------------------------------ */
+
+.cv-langs {
+  margin: 0;
+}
+
+.cv-langs div {
+  display: flex;
+  gap: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cv-langs dt::after {
+  content: " :";
+}
+
+.cv-langs dd {
+  margin: 0;
+}
+
+.toefl {
+  margin: 1rem 0 0.5rem;
+  max-width: 24rem;
+}
+
+.toefl-total {
+  margin: 0;
+  padding: 0.2rem 0;
+  border: 1px dotted var(--line);
+  border-radius: 999px;
+  text-align: center;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+.cv ul.toefl-scores {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.toefl-scores li {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.score {
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border: 1px dotted var(--line);
+  border-radius: 50%;
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+
+/* --- skills: name + dotted bar ---------------------------------- */
+
+.cv ul.skill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  color: var(--soft);
+}
+
+.skill-list li {
+  display: grid;
+  grid-template-columns: 9.5rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: center;
+  line-height: 1.9;
+  white-space: nowrap;
+}
+
+.skill-list li::after {
+  content: "";
+  width: calc(var(--level) * 20%);
+  border-bottom: 4px dotted var(--muted);
+}
+
+/* level 5 skills are highlighted, like the cyan ones on the PDF */
+.skill-list li[style*="5"] {
+  color: var(--hover);
+}
+
+.skill-list li[style*="5"]::after {
+  border-bottom-color: var(--hover);
+}
+
+.cv ul.skill-tags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.skill-tags li {
+  padding: 0.1rem 0.55rem;
+  border: 1px dashed var(--muted);
+  color: var(--soft);
+}
+
+.skill-tags li.top {
+  border-color: var(--hover);
+  color: var(--hover);
+}
+
+/* --- references ------------------------------------------------ */
+
+.cv ul.cv-refs {
+  list-style: none;
+  padding: 0;
+  font-size: 1rem;
+  color: var(--ink);
+  letter-spacing: 0.08em;
+}
+
+.cv-refs span {
+  color: var(--muted);
+}
+
+/* --- tablets: name card wraps ------------------------------------ */
+
+@media (max-width: 64rem) {
+  .cv-hero {
+    grid-template-columns: auto 1fr;
+  }
+
+  .cv-contact {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .cv-handle {
+    display: inline;
+    margin-right: 0.75rem;
+  }
+}
+
+/* --- phones: one column ------------------------------------------ */
+
+@media (max-width: 52rem) {
+  .cv-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cv-col:first-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .cv-col:last-child {
+    padding-left: 0;
+  }
+
+  .cv-photo {
+    width: 5.5rem;
+    height: 5.5rem !important;
+  }
+
+  .cv-section h2 {
+    font-size: 2rem;
+  }
+
+  .timeline > li {
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+  }
+
+  .skill-list li {
+    grid-template-columns: 8rem minmax(0, 1fr);
+  }
+}

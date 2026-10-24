@@ -7,8 +7,10 @@
 
     <!-- One folder deep, so one level up to the stylesheet -->
     <link rel="stylesheet" href="../style.css" />
+    <!-- Styles used only by the CV pages -->
+    <link rel="stylesheet" href="cv.css" />
   </head>
-  <body>
+  <body class="project cv-page">
     <header>
       <a class="site-name" href="../index.html">TH45M0NK</a>
       <nav>
@@ -30,12 +32,353 @@
       </nav>
     </header>
 
-    <main>
-      <h1>Curriculum Vitae</h1>
-      <p class="tagline">Soheil Kheirabadi</p>
+    <main class="cv">
+      <!-- ===== Name card ===== -->
+      <section class="cv-hero">
+        <img
+          class="cv-photo"
+          src="storage/cv-photo.jpg"
+          alt="Soheil Kheirabadi at the IRO-Artists presentation"
+          width="480"
+          height="480"
+        />
+        <div class="cv-id">
+          <h1>Soheil<br />Kheirabadi</h1>
+          <p class="cv-role">Visual artist / VFX &amp; CGI artist</p>
+        </div>
+        <p class="cv-contact">
+          <span class="cv-handle">@th45m0nk</span>
+          <a
+            href="https://www.instagram.com/th45m0nk/"
+            target="_blank"
+            rel="noopener"
+            >Instagram</a
+          >
+          &middot;
+          <a
+            href="https://www.youtube.com/@th45m0nk"
+            target="_blank"
+            rel="noopener"
+            >YouTube</a
+          >
+        </p>
+      </section>
 
-      <!-- CV sections go here -->
-      <p>Coming soon.</p>
+      <div class="cv-grid">
+        <!-- ===== Left column ===== -->
+        <div class="cv-col">
+          <section class="cv-section" id="education">
+            <h2>Education</h2>
+            <ol class="timeline">
+              <li>
+                <p class="when"><span>sep 2024</span> <span>present</span></p>
+                <div class="what">
+                  <h3>MA — Interactive Arts &amp; Technology</h3>
+                  <p class="org">SIAT — Simon Fraser University, BC (Canada)</p>
+                  <ul>
+                    <li>Supervisor: Professor Niranjan Rajah, thesis-based program.</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>sep 2020</span> <span>jul 2023</span></p>
+                <div class="what">
+                  <h3>MFA — Painting</h3>
+                  <p class="org">University of Art — Tehran (Farabi campus), Tehran (Iran)</p>
+                  <ul>
+                    <li>
+                      Thesis: Studying sacred geometry patterns in Islamic
+                      geometric patterns of Safavid domes.
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>sep 2014</span> <span>jul 2019</span></p>
+                <div class="what">
+                  <h3>Bachelor — Architectural Engineering</h3>
+                  <p class="org">W.T.I.A.U University, Tehran (Iran)</p>
+                  <ul>
+                    <li>
+                      B.Arch project: Sacred geometry patterns in studying
+                      four-dimensional structures using a sustainable approach.
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          <section class="cv-section" id="languages">
+            <h2>Language skills</h2>
+            <dl class="cv-langs">
+              <div><dt>Persian</dt> <dd>native</dd></div>
+              <div><dt>English</dt> <dd>fluent</dd></div>
+            </dl>
+
+            <div class="toefl">
+              <p class="toefl-total">TOEFL iBT : 100</p>
+              <ul class="toefl-scores">
+                <li><span class="score">29</span> Listening</li>
+                <li><span class="score">27</span> Reading</li>
+                <li><span class="score">22</span> Writing</li>
+                <li><span class="score">22</span> Speaking</li>
+              </ul>
+            </div>
+            <ul class="cv-notes">
+              <li>The TOEFL iBT test took place on 6 December 2023.</li>
+              <li>I am currently working on my French language skills.</li>
+            </ul>
+          </section>
+
+          <section class="cv-section" id="skills">
+            <h2>Skills</h2>
+
+            <!-- --level: 1 to 5. Level 5 skills are highlighted. -->
+            <h3>2D visualization</h3>
+            <ul class="skill-list">
+              <li style="--level: 5">photoshop</li>
+              <li style="--level: 4">lightroom</li>
+              <li style="--level: 3">illustrator</li>
+              <li style="--level: 5">figma</li>
+              <li style="--level: 2">indesign</li>
+              <li style="--level: 3">sketching</li>
+            </ul>
+
+            <h3>3D visualization</h3>
+            <ul class="skill-list">
+              <li style="--level: 5">cinema 4d</li>
+              <li style="--level: 3">houdini</li>
+              <li style="--level: 5">rhino 3d</li>
+              <li style="--level: 2">blender</li>
+              <li style="--level: 5">redshift</li>
+              <li style="--level: 4">vray</li>
+            </ul>
+
+            <h3>Moving images</h3>
+            <ul class="skill-list">
+              <li style="--level: 5">after-effects</li>
+              <li style="--level: 5">premiere</li>
+            </ul>
+
+            <h3>Also</h3>
+            <ul class="skill-tags">
+              <li class="top">revit architecture</li>
+              <li>substance family</li>
+              <li>max msp</li>
+              <li>touch designer</li>
+              <li class="top">microsoft office</li>
+              <li>3d-generalization</li>
+              <li>fx &amp; simulation knowledge</li>
+              <li>amateur animating</li>
+              <li>network management &amp; it</li>
+            </ul>
+          </section>
+        </div>
+
+        <!-- ===== Right column ===== -->
+        <div class="cv-col">
+          <section class="cv-section" id="teaching">
+            <h2>Educational experiences</h2>
+            <h3>T.A. — Teaching assistant</h3>
+            <ol class="timeline">
+              <li>
+                <p class="when"><span>sep 2016</span> <span>jan 2018</span></p>
+                <div class="what">
+                  <p class="org">W.T.I.A.U University | Tehran (Iran)</p>
+                  <ul>
+                    <li>
+                      Teaching assistant of Mrs. Roshanak Roshanaee's design
+                      studio 1 | 2017 — she sadly passed away in 2026.
+                    </li>
+                    <li>Graduated from the Rhino + Python workshop at W.T.I.A.U | 2018.</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>sep 2021</span></p>
+                <div class="what">
+                  <p class="org">University of Art — Tehran (Farabi campus), Tehran (Iran)</p>
+                  <ul>
+                    <li>
+                      Teaching assistant: Essentials of making a video |
+                      technical information + practical experience with Adobe
+                      Premiere Pro.
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          <section class="cv-section" id="work">
+            <h2>Work experiences</h2>
+
+            <h3>Architecture &amp; engineering era</h3>
+            <ol class="timeline">
+              <li>
+                <p class="when"><span>may 2015</span> <span>apr 2017</span></p>
+                <div class="what">
+                  <p class="org">Pars-Peyab Consulting Engineers</p>
+                  <ul>
+                    <li>
+                      I worked two years at Pars-Peyab Consulting Engineers in
+                      the architecture unit. The main focus of my tasks was 3D
+                      architectural visualization of projects.
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>jun 2026</span> <span>present</span></p>
+                <div class="what">
+                  <p class="org">Rincovitch Consultants + freelance experiences</p>
+                  <ul>
+                    <li>Remote Revit operator at rincovitch.com.au</li>
+                    <li>
+                      You can visit my page on
+                      <a href="https://www.fiverr.com/cyber_m0nks" target="_blank" rel="noopener">Fiverr</a>.
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+
+            <h3>Cinema &amp; animation</h3>
+            <ol class="timeline">
+              <li>
+                <p class="when"><span>dec 2018</span> <span>present</span></p>
+                <div class="what">
+                  <p class="org">MASK-STUDIO + freelance experiences</p>
+                  <ul>
+                    <li>
+                      IMDb reference:
+                      <a href="https://www.imdb.com/name/nm12800027" target="_blank" rel="noopener">Soheil Kheirabadi — IMDb</a>
+                    </li>
+                    <li>Commercial TV projects: refer to the in-depth CV for more details.</li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+
+            <h3>IT manager / social media manager</h3>
+            <ol class="timeline">
+              <li>
+                <p class="when"><span>mar 2021</span> <span>present</span></p>
+                <div class="what">
+                  <p class="org">Bentasia Clinic [@bentasiaclinic] — bentasiaglobal.com</p>
+                  <ul>
+                    <li>website manager • graphic designer • online class coordinator</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>jun 2025</span> <span>present</span></p>
+                <div class="what">
+                  <p class="org">V For Veritas — London-based philosophy channel [@vforveritas]</p>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>jun 2025</span> <span>present</span></p>
+                <div class="what">
+                  <p class="org">Bouquet Cafe — Flower shop &amp; cafe [@bouquetcafe.ca]</p>
+                  <ul>
+                    <li>website manager • graphic designer — Robson Street, BC, Canada</li>
+                  </ul>
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          <section class="cv-section" id="honors">
+            <h2>Honors &amp; awards</h2>
+            <ol class="timeline">
+              <li>
+                <p class="when"><span>mar 2013</span></p>
+                <div class="what">
+                  <p class="org">The 4th International Urban Film Festival [testimonial]</p>
+                  <ul>
+                    <li>
+                      Four testimonials for four selected [student] short films
+                      in two fields: short animations &amp; short documentaries.
+                    </li>
+                    <li>Testimonials are proudly signed by Ezzatolah Entezami.</li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>2019 &amp;</span> <span>2020</span></p>
+                <div class="what">
+                  <p class="org">Fajr International Film Festival [nominated]</p>
+                  <ul>
+                    <li>
+                      Takhti movie 2019 | Nominated for best visual effects —
+                      3D artist + 3D generalist
+                    </li>
+                    <li>
+                      Day Zero movie 2020 | Nominated for best visual effects —
+                      3D artist + 3D generalist
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>may 2021</span></p>
+                <div class="what">
+                  <p class="org">Festival de Cannes [short film] selection</p>
+                  <ul>
+                    <li>
+                      Orthodontics short film 2021 | 3D generalist + senior
+                      compositor [mask-studio]
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>mar–oct</span> <span>2022</span></p>
+                <div class="what">
+                  <p class="org">Manipulated Gens — the Iranian new media artists in Europe</p>
+                  <ul>
+                    <li>
+                      Group exhibition in WEBER &amp; WEBER (Turin, Italy), Art
+                      Active Gallery &amp; Ateliers (Passau, Germany) — curated
+                      by Saeed Khavarnezhad (Safpem Institute)
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>sep 2023</span></p>
+                <div class="what">
+                  <p class="org">2nd IROMEDIA annual exhibition — Latin American + Iranian artists</p>
+                  <ul>
+                    <li>
+                      Group exhibition in TechFac (Tehran, Iran) — curated by
+                      Saeed Khavarnezhad (Safpem Institute) &amp; Gabriel
+                      Soucheyre
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <p class="when"><span>may 2024</span></p>
+                <div class="what">
+                  <p class="org">AFA Digital Arts Annual Awards — Honorable Mention</p>
+                </div>
+              </li>
+            </ol>
+          </section>
+
+          <section class="cv-section" id="references">
+            <h2>References</h2>
+            <ul class="cv-refs">
+              <li>Niranjan Rajah <span>(SFU supervisor)</span></li>
+              <li>Hiva A. Alizadeh <span>(studio supervisor)</span></li>
+            </ul>
+            <p class="cv-muted">Contact details available on request.</p>
+          </section>
+        </div>
+      </div>
     </main>
 
     <footer>
