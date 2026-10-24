@@ -23,19 +23,11 @@
 
 .cv-hero {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr auto;
   align-items: end;
   gap: 1rem 1.5rem;
   padding-bottom: 1.75rem;
   border-bottom: 1px dashed var(--line);
-}
-
-.cv-photo {
-  width: 7.5rem;
-  height: 7.5rem !important;
-  object-fit: cover;
-  border: 1px dashed var(--line);
-  padding: 3px;
 }
 
 .cv-id h1 {
@@ -292,7 +284,7 @@ body.cv-page footer {
 
 @media (max-width: 64rem) {
   .cv-hero {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr;
   }
 
   .cv-contact {
@@ -320,11 +312,6 @@ body.cv-page footer {
 
   .cv-col:last-child {
     padding-left: 0;
-  }
-
-  .cv-photo {
-    width: 5.5rem;
-    height: 5.5rem !important;
   }
 
   .cv-section h2 {
