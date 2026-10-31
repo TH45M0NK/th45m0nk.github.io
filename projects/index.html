@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="../favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <title>Projects — Soheil Kheirabadi</title>
     <meta name="description" content="Projects by Soheil Kheirabadi (TH45M0NK): SIAT course work, immersive sacred geometry and TouchDesigner pieces, CGI/VFX, graphic design, photography and publications." />
     <meta name="author" content="Soheil Kheirabadi" />
@@ -42,8 +45,7 @@
     </header>
 
     <main>
-      <h1>Projects</h1>
-      <p class="tagline">Six faces of one practice — pick a corner of the cube.</p>
+      <h1 class="hub-title">Projects</h1>
 
       <!-- The six sections sit on the corners of a hexagon: the outline
            of a cube seen corner-on. Positions are set in
@@ -71,27 +73,21 @@
           <circle class="core" cx="50" cy="50" r="1.2" />
         </svg>
         <a class="hex-tile t-siat" href="siat/index.html">
-          <img src="shared/previews/siat.jpg" alt="" loading="lazy" decoding="async" />
           <span class="hex-label"><strong>SIAT</strong><small>IAT 806 · course work</small></span>
         </a>
         <a class="hex-tile t-immersive" href="immersive/index.html">
-          <img src="https://i.ytimg.com/vi/zY9m3oyuoJs/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
           <span class="hex-label"><strong>Immersive</strong><small>23 videos</small></span>
         </a>
         <a class="hex-tile t-cgi" href="cgi-vfx/index.html">
-          <img src="https://i.ytimg.com/vi/OGj0zejATdk/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
           <span class="hex-label"><strong>CGI/VFX</strong><small>3 films · 5 animations</small></span>
         </a>
         <a class="hex-tile t-graphic" href="graphic-design/index.html">
-          <img src="https://cdnb.artstation.com/p/assets/covers/images/071/236/213/medium/th45m0nk-th45m0nk-poster-thumb.jpg?1704751437" alt="" loading="lazy" decoding="async" />
           <span class="hex-label"><strong>Graphic Design</strong><small>8 works</small></span>
         </a>
         <a class="hex-tile t-photo" href="photography/index.html">
-          <span class="hex-art" aria-hidden="true"></span>
-          <span class="hex-label"><strong>Photography</strong><small>coming soon</small></span>
+          <span class="hex-label"><strong>Photography</strong></span>
         </a>
         <a class="hex-tile t-pub" href="publications/index.html">
-          <img src="shared/previews/publications.jpg" alt="" loading="lazy" decoding="async" />
           <span class="hex-label"><strong>Publications</strong><small>1 paper</small></span>
         </a>
       </nav>
@@ -102,16 +98,12 @@
     </footer>
     <script src="shared/sections.js"></script>
     <script>
-      // Show the newest photograph on the Photography corner, if there is one.
+      // Once there are photographs, show how many on the Photography corner.
       TH45.listFolder("projects/photography/photos", [".jpg", ".jpeg", ".png", ".webp", ".gif"])
         .then((files) => {
           if (!files.length) return;
-          files.sort().reverse();
-          const tile = document.querySelector(".t-photo");
-          tile.querySelector(".hex-art").replaceWith(
-            TH45.el("img", { src: `photography/photos/${files[0]}`, alt: "", loading: "lazy" }),
-          );
-          tile.querySelector("small").textContent = `${files.length} photograph${files.length > 1 ? "s" : ""}`;
+          const label = document.querySelector(".t-photo .hex-label");
+          label.append(TH45.el("small", { text: `${files.length} photograph${files.length > 1 ? "s" : ""}` }));
         })
         .catch(() => {});
     </script>

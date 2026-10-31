@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- hexagon cube: outline + the three inner edges, stroke only -->
+  <g fill="none" stroke="#f0db19" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <polygon points="32,4 56.25,18 56.25,46 32,60 7.75,46 7.75,18" />
+    <path d="M32 32 L32 60 M32 32 L7.75 18 M32 32 L56.25 18" />
+  </g>
+</svg>

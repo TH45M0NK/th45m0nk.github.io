@@ -76,7 +76,7 @@ body.wide footer {
 .hex-hub {
   position: relative;
   /* square that always fits in one screen, like the home page */
-  width: min(100%, calc(100dvh - 20rem), 40rem);
+  width: min(100%, calc(100dvh - 17rem), 42rem);
   min-width: 18rem;
   aspect-ratio: 1;
   margin: 0.5rem auto 0;
@@ -157,7 +157,14 @@ body.wide footer {
   text-decoration: none;
   display: grid;
   place-items: center;
-  transition: transform 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.hex-tile:hover,
+.hex-tile:focus-visible {
+  background: #2a2216;
 }
 
 .hex-tile img,
@@ -221,6 +228,11 @@ body.wide footer {
   background:
     radial-gradient(circle at 50% 50%, #100e0a 0 18%, transparent 19%),
     repeating-conic-gradient(from 15deg, #2b2720 0 30deg, #1a1814 30deg 60deg);
+}
+
+/* the hub's title sits centered above the hexagon */
+.hub-title {
+  text-align: center;
 }
 
 /* light up the matching spoke and outline */
