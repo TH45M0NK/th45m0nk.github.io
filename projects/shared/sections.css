@@ -92,36 +92,27 @@ body.wide footer {
   pointer-events: none;
 }
 
-.hex-lines .face {
-  fill: var(--ink);
-}
-
-.hex-lines .rim,
 .hex-lines .ring {
   fill: none;
   stroke: var(--muted);
   stroke-width: 0.25;
   stroke-dasharray: 1 1;
+  opacity: 0.7;
+}
+
+/* the links between neighbouring hexagons: one continuous line */
+.hex-lines .link {
+  stroke: var(--line);
+  stroke-width: 0.35;
 }
 
 .hex-lines .spoke {
   stroke: var(--muted);
   stroke-width: 0.3;
+  stroke-dasharray: 1 1;
   transition:
     stroke 0.2s ease,
     stroke-width 0.2s ease;
-}
-
-.hex-lines .spoke.hidden-edge {
-  stroke-dasharray: 1 1;
-}
-
-.hex-lines .outline {
-  fill: none;
-  stroke: var(--muted);
-  stroke-width: 0.3;
-  stroke-dasharray: 1.2 0.8;
-  transition: stroke 0.2s ease;
 }
 
 .hex-lines .core {
@@ -152,7 +143,7 @@ body.wide footer {
   aspect-ratio: 0.866;
   transform: translate(-50%, -50%);
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  background: #1d1b17;
+  background: transparent;
   color: var(--ink);
   text-decoration: none;
   display: grid;
@@ -164,7 +155,29 @@ body.wide footer {
 
 .hex-tile:hover,
 .hex-tile:focus-visible {
-  background: #2a2216;
+  background: transparent;
+}
+
+/* the hexagon's own outline: a continuous line */
+.hex-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hex-frame polygon {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1.5px;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 0.2s ease;
+}
+
+.hex-tile:hover .hex-frame polygon,
+.hex-tile:focus-visible .hex-frame polygon {
+  stroke: var(--hover);
 }
 
 .hex-tile img,
@@ -236,15 +249,14 @@ body.wide footer {
 }
 
 /* light up the matching spoke and outline */
-.hex-hub:has(.t-siat:is(:hover, :focus-visible)) :is(.sp-siat, .ol-siat),
-.hex-hub:has(.t-immersive:is(:hover, :focus-visible)) :is(.sp-immersive, .ol-immersive),
-.hex-hub:has(.t-photo:is(:hover, :focus-visible)) :is(.sp-photo, .ol-photo),
-.hex-hub:has(.t-pub:is(:hover, :focus-visible)) :is(.sp-pub, .ol-pub),
-.hex-hub:has(.t-graphic:is(:hover, :focus-visible)) :is(.sp-graphic, .ol-graphic),
-.hex-hub:has(.t-cgi:is(:hover, :focus-visible)) :is(.sp-cgi, .ol-cgi) {
+.hex-hub:has(.t-siat:is(:hover, :focus-visible)) .sp-siat,
+.hex-hub:has(.t-immersive:is(:hover, :focus-visible)) .sp-immersive,
+.hex-hub:has(.t-photo:is(:hover, :focus-visible)) .sp-photo,
+.hex-hub:has(.t-pub:is(:hover, :focus-visible)) .sp-pub,
+.hex-hub:has(.t-graphic:is(:hover, :focus-visible)) .sp-graphic,
+.hex-hub:has(.t-cgi:is(:hover, :focus-visible)) .sp-cgi {
   stroke: var(--hover);
   stroke-width: 0.5;
-  stroke-dasharray: none;
 }
 
 /* the six positions: corners of a hexagon (a cube seen corner-on) */
