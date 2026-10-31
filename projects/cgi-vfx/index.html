@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CGI / VFX — Soheil Kheirabadi</title>
+    <meta name="description" content="CGI and VFX work by Soheil Kheirabadi, 3D generalist and compositor at Mask Studio: Zero Day, Orthodontics (Cannes selection) and I Want To Live breakdowns." />
+    <meta name="author" content="Soheil Kheirabadi" />
+    <link rel="canonical" href="https://th45m0nk.github.io/projects/cgi-vfx/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Soheil Kheirabadi — TH45M0NK" />
+    <meta property="og:title" content="CGI / VFX — Soheil Kheirabadi" />
+    <meta property="og:description" content="CGI and VFX work by Soheil Kheirabadi, 3D generalist and compositor at Mask Studio: Zero Day, Orthodontics (Cannes selection) and I Want To Live breakdowns." />
+    <meta property="og:url" content="https://th45m0nk.github.io/projects/cgi-vfx/" />
+    <meta property="og:image" content="https://th45m0nk.github.io/storage/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="../../projects/shared/sections.css" />
+  </head>
+  <body class="project wide">
+    <header>
+      <a class="site-name" href="../../index.html">TH45M0NK</a>
+      <nav>
+        <a href="../../index.html">Home</a>
+        <div class="nav-drop">
+          <a href="../../projects/index.html" aria-current="page">Projects</a>
+          <div class="nav-sub">
+            <a href="../../projects/siat/index.html">SIAT</a>
+            <a href="../../projects/immersive/index.html">Immersive</a>
+            <a href="../../projects/cgi-vfx/index.html">CGI/VFX</a>
+            <a href="../../projects/graphic-design/index.html">Graphic Design</a>
+            <a href="../../projects/photography/index.html">Photography</a>
+            <a href="../../projects/publications/index.html">Publications</a>
+          </div>
+        </div>
+        <a href="../../cv/index.html">CV</a>
+        <span class="nav-divider" aria-hidden="true"></span>
+        <a href="https://www.youtube.com/@th45m0nk" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/th45m0nk/" target="_blank" rel="noopener">IG</a>
+      </nav>
+    </header>
+
+    <main>
+      <a class="back" href="../index.html">&larr; Projects</a>
+
+      <h1>CGI / VFX</h1>
+      <p class="tagline">3D generalist · compositor · visual effects</p>
+
+      <div class="section-intro">
+        <p>
+          Since 2018 I have worked as a 3D artist, 3D generalist and compositor
+          at Mask Studio and Yuna Studio, on Iranian feature films, series and
+          short films. The visual effects of <em>Takhti</em> (2019) and
+          <em>Day Zero</em> (2020), which I worked on as a 3D generalist, were
+          nominated for Best Visual Effects at the Fajr International Film
+          Festival, and the short film <em>Orthodontics</em> (2021) was a
+          Festival de Cannes short film selection. I work mainly in Cinema 4D,
+          Houdini, Redshift and After Effects.
+        </p>
+        <p>
+          <a class="pill-link" href="https://www.imdb.com/name/nm12800027/" target="_blank" rel="noopener">Full credits on IMDb</a>
+        </p>
+      </div>
+
+      <h2 class="group-title">Film &amp; series</h2>
+      <ul class="film-grid" id="industry"></ul>
+
+      <h2 class="group-title">Animation &amp; video art</h2>
+      <ul class="film-grid" id="animation"></ul>
+    </main>
+
+    <footer>
+      <p><a href="../index.html">&larr; Back to Projects</a></p>
+    </footer>
+    <script src="../shared/sections.js"></script>
+    <script src="films.js"></script>
+    <script>
+      const fill = (list, films) =>
+        list.replaceChildren(
+          ...films.map((film) =>
+            TH45.el(
+              "li",
+              {},
+              TH45.videoTile(film),
+              TH45.el("div", { class: "film-meta" }, TH45.el("b", { text: film.title }), TH45.el("time", { text: String(film.year) })),
+              TH45.el("p", { class: "film-role", text: film.role }),
+            ),
+          ),
+        );
+      fill(document.getElementById("industry"), INDUSTRY);
+      fill(document.getElementById("animation"), ANIMATION);
+    </script>
+  </body>
+</html>

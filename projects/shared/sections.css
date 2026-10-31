@@ -1,0 +1,835 @@
+/* ===========================================================
+   Shared styles for the Projects hub and its six sections.
+   Uses the colors and fonts defined in /style.css.
+   =========================================================== */
+
+/* Gallery pages use the full site width */
+body.wide main {
+  max-width: none;
+}
+
+body.wide footer {
+  padding-left: 0;
+}
+
+.section-intro {
+  max-width: 44rem;
+  color: color-mix(in srgb, var(--ink) 75%, var(--paper));
+}
+
+.section-intro p {
+  margin: 0 0 1rem;
+}
+
+/* a dashed "button" link, used for IMDb / ArtStation */
+.pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  border: 1px dashed var(--accent);
+  color: var(--accent);
+  text-decoration: none;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    gap 0.15s ease;
+}
+
+.pill-link::after {
+  content: "↗";
+}
+
+.pill-link:hover,
+.pill-link:focus-visible {
+  color: var(--hover);
+  border-color: var(--hover);
+  gap: 0.8rem;
+}
+
+.group-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 3rem 0 1rem;
+}
+
+.group-title span {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.empty-note {
+  padding: 3rem 1rem;
+  border: 1px dashed var(--muted);
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ===========================================================
+   1. Projects hub — six hexagons on the corners of a cube
+   =========================================================== */
+
+.hex-hub {
+  position: relative;
+  /* square that always fits in one screen, like the home page */
+  width: min(100%, calc(100dvh - 20rem), 40rem);
+  min-width: 18rem;
+  aspect-ratio: 1;
+  margin: 0.5rem auto 0;
+  container-type: inline-size; /* labels scale with the hexagon, not the screen */
+}
+
+.hex-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.hex-lines .face {
+  fill: var(--ink);
+}
+
+.hex-lines .rim,
+.hex-lines .ring {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 0.25;
+  stroke-dasharray: 1 1;
+}
+
+.hex-lines .spoke {
+  stroke: var(--muted);
+  stroke-width: 0.3;
+  transition:
+    stroke 0.2s ease,
+    stroke-width 0.2s ease;
+}
+
+.hex-lines .spoke.hidden-edge {
+  stroke-dasharray: 1 1;
+}
+
+.hex-lines .outline {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 0.3;
+  stroke-dasharray: 1.2 0.8;
+  transition: stroke 0.2s ease;
+}
+
+.hex-lines .core {
+  fill: var(--hover);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hex-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes hex-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.6);
+  }
+}
+
+.hex-tile {
+  --w: 25%;
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  aspect-ratio: 0.866;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: #1d1b17;
+  color: var(--ink);
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+  transition: transform 0.25s ease;
+}
+
+.hex-tile img,
+.hex-tile .hex-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+  filter: grayscale(0.7) brightness(0.45);
+  transition:
+    filter 0.3s ease,
+    transform 0.4s ease;
+}
+
+.hex-label {
+  position: relative;
+  text-align: center;
+  line-height: 1;
+  padding: 0 0.5rem;
+}
+
+.hex-label strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 3.3cqw;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.hex-label small {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: max(0.62rem, 1.65cqw);
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
+  letter-spacing: 0.04em;
+}
+
+.hex-tile:hover,
+.hex-tile:focus-visible {
+  transform: translate(-50%, -50%) scale(1.07);
+  outline: none;
+}
+
+.hex-tile:hover img,
+.hex-tile:focus-visible img,
+.hex-tile:hover .hex-art,
+.hex-tile:focus-visible .hex-art {
+  filter: grayscale(0) brightness(0.75);
+  transform: scale(1.1);
+}
+
+.hex-tile:hover .hex-label strong,
+.hex-tile:focus-visible .hex-label strong {
+  color: var(--hover);
+}
+
+.hex-art {
+  background:
+    radial-gradient(circle at 50% 50%, #100e0a 0 18%, transparent 19%),
+    repeating-conic-gradient(from 15deg, #2b2720 0 30deg, #1a1814 30deg 60deg);
+}
+
+/* light up the matching spoke and outline */
+.hex-hub:has(.t-siat:is(:hover, :focus-visible)) :is(.sp-siat, .ol-siat),
+.hex-hub:has(.t-immersive:is(:hover, :focus-visible)) :is(.sp-immersive, .ol-immersive),
+.hex-hub:has(.t-photo:is(:hover, :focus-visible)) :is(.sp-photo, .ol-photo),
+.hex-hub:has(.t-pub:is(:hover, :focus-visible)) :is(.sp-pub, .ol-pub),
+.hex-hub:has(.t-graphic:is(:hover, :focus-visible)) :is(.sp-graphic, .ol-graphic),
+.hex-hub:has(.t-cgi:is(:hover, :focus-visible)) :is(.sp-cgi, .ol-cgi) {
+  stroke: var(--hover);
+  stroke-width: 0.5;
+  stroke-dasharray: none;
+}
+
+/* the six positions: corners of a hexagon (a cube seen corner-on) */
+.t-siat { --x: 50%; --y: 16%; }
+.t-immersive { --x: 79.44%; --y: 33%; }
+.t-photo { --x: 79.44%; --y: 67%; }
+.t-pub { --x: 50%; --y: 84%; }
+.t-graphic { --x: 20.56%; --y: 67%; }
+.t-cgi { --x: 20.56%; --y: 33%; }
+
+/* phones: a two-column honeycomb */
+@media (max-width: 34rem) {
+  .hex-hub {
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 0.75rem;
+    padding-bottom: 4rem;
+  }
+
+  .hex-lines {
+    display: none;
+  }
+
+  .hex-tile {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    transform: none;
+    margin-bottom: -10%;
+  }
+
+  .hex-tile:nth-of-type(even) {
+    transform: translateY(50%);
+  }
+
+  .hex-tile:hover,
+  .hex-tile:focus-visible {
+    transform: scale(1.04);
+  }
+
+  .hex-tile:nth-of-type(even):hover,
+  .hex-tile:nth-of-type(even):focus-visible {
+    transform: translateY(50%) scale(1.04);
+  }
+
+  .hex-label strong {
+    font-size: 5.6cqw;
+  }
+
+  .hex-label small {
+    font-size: 3.4cqw;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hex-lines .core {
+    animation: none;
+  }
+}
+
+/* ===========================================================
+   2. Tiles shared by videos, artworks and photos
+   =========================================================== */
+
+.tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: #1d1b17;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.tile img {
+  display: block;
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+  filter: brightness(0.82) saturate(0.85);
+  transition:
+    transform 0.45s ease,
+    filter 0.3s ease;
+}
+
+/* dashed frame that appears on hover */
+.tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px dashed transparent;
+  pointer-events: none;
+  transition: border-color 0.2s ease;
+}
+
+.tile-caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 2.5rem 0.75rem 0.6rem;
+  background: linear-gradient(transparent, rgba(16, 14, 10, 0.92));
+  font-size: 0.8rem;
+  line-height: 1.35;
+  transform: translateY(35%);
+  opacity: 0;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.tile-caption b {
+  display: block;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.tile-caption span {
+  color: var(--accent);
+}
+
+/* play symbol: a small hexagon with a triangle */
+.tile-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3.2rem;
+  aspect-ratio: 0.866;
+  transform: translate(-50%, -50%) scale(0.8);
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: rgba(16, 14, 10, 0.55);
+  opacity: 0;
+  transition:
+    opacity 0.2s ease,
+    transform 0.25s ease,
+    background 0.2s ease;
+}
+
+.tile-play::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 54%;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+  border-width: 0.5rem 0 0.5rem 0.85rem;
+  border-color: transparent transparent transparent var(--ink);
+}
+
+.tile:hover img,
+.tile:focus-visible img {
+  transform: scale(1.06);
+  filter: brightness(1) saturate(1);
+}
+
+.tile:hover::after,
+.tile:focus-visible::after {
+  border-color: var(--hover);
+}
+
+.tile:hover .tile-caption,
+.tile:focus-visible .tile-caption {
+  transform: none;
+  opacity: 1;
+}
+
+.tile:hover .tile-play,
+.tile:focus-visible .tile-play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  background: var(--hover);
+}
+
+.tile:focus-visible {
+  outline: none;
+}
+
+/* on touch screens there is no hover, so always show the captions */
+@media (hover: none) {
+  .tile-caption {
+    transform: none;
+    opacity: 1;
+  }
+
+  .tile-play {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.85);
+  }
+}
+
+/* ===========================================================
+   3. Justified "puzzle" layout (rows always fill the width)
+   =========================================================== */
+
+.puzzle {
+  --gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.puzzle-row {
+  display: flex;
+  gap: var(--gap);
+}
+
+.puzzle-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.puzzle-quad {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+}
+
+/* before the script runs (or without JavaScript): a simple grid */
+.puzzle:not(.is-laid-out) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+}
+
+.puzzle:not(.is-laid-out) .tile {
+  aspect-ratio: 16 / 9;
+}
+
+/* ===========================================================
+   4. Regular 16:9 grid (CGI / VFX)
+   =========================================================== */
+
+.film-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: 1.75rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.film-grid .tile {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.film-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+.film-meta b {
+  font-weight: 400;
+  color: var(--ink);
+  transition: color 0.15s ease;
+}
+
+.film-meta time {
+  color: var(--hover);
+  white-space: nowrap;
+}
+
+.film-role {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.film-grid li:hover .film-meta b {
+  color: var(--hover);
+}
+
+/* the title and year sit under the video here, not on it */
+.film-grid .tile-caption {
+  display: none;
+}
+
+/* ===========================================================
+   5. Photo masonry
+   =========================================================== */
+
+.masonry {
+  columns: 3 16rem;
+  column-gap: 8px;
+}
+
+.masonry .tile {
+  width: 100%;
+  margin: 0 0 8px;
+  break-inside: avoid;
+}
+
+.masonry .tile img {
+  height: auto !important;
+}
+
+/* ===========================================================
+   6. Pop-up viewer (video player and image lightbox)
+   =========================================================== */
+
+dialog.viewer {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(10, 9, 7, 0.97);
+  color: var(--ink);
+}
+
+dialog.viewer::backdrop {
+  background: rgba(10, 9, 7, 0.7);
+}
+
+dialog.viewer[open] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* long titles shrink instead of pushing buttons off screen */
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  animation: viewer-in 0.2s ease;
+}
+
+@keyframes viewer-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.viewer-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px dashed color-mix(in srgb, var(--line) 40%, transparent);
+}
+
+.viewer-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.viewer-btn {
+  flex: none;
+  background: none;
+  border: 1px dashed var(--muted);
+  color: var(--ink);
+  font: inherit;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.viewer-btn:hover,
+.viewer-btn:focus-visible {
+  color: var(--hover);
+  border-color: var(--hover);
+}
+
+.viewer-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.viewer-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  min-height: 0;
+}
+
+.viewer-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto !important;
+  object-fit: contain;
+}
+
+.viewer-video {
+  width: min(100%, calc((100dvh - 9rem) * 16 / 9));
+  aspect-ratio: 16 / 9;
+}
+
+.viewer-video.vertical {
+  width: min(100%, calc((100dvh - 9rem) * 9 / 16));
+  aspect-ratio: 9 / 16;
+}
+
+.viewer-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.viewer-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.75rem;
+  aspect-ratio: 0.866;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  border: 0;
+  background: rgba(253, 253, 251, 0.1);
+  color: var(--ink);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.viewer-nav:hover,
+.viewer-nav:focus-visible {
+  background: var(--hover);
+  color: var(--paper);
+}
+
+.viewer-nav.prev {
+  left: 0.75rem;
+}
+
+.viewer-nav.next {
+  right: 0.75rem;
+}
+
+.viewer-foot {
+  padding: 0.6rem 1rem 0.9rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.viewer-foot a {
+  margin-left: 0.5rem;
+}
+
+/* ===========================================================
+   7. Publications
+   =========================================================== */
+
+.doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
+  gap: 2rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.doc-card {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.doc-thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 0.773;
+  background: #f4f1ea;
+  border: 1px dashed var(--muted);
+  overflow: hidden;
+  transform-origin: left center;
+  transition:
+    transform 0.3s ease,
+    border-color 0.2s ease,
+    box-shadow 0.3s ease;
+}
+
+.doc-thumb canvas,
+.doc-thumb img {
+  display: block;
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: top;
+}
+
+/* the folded corner */
+.doc-thumb::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: linear-gradient(225deg, var(--paper) 50%, #d8d2c4 50%);
+  transition:
+    width 0.25s ease,
+    height 0.25s ease;
+}
+
+.doc-card:hover .doc-thumb,
+.doc-card:focus-visible .doc-thumb {
+  transform: perspective(900px) rotateY(-9deg) translateX(4px);
+  border-color: var(--hover);
+  box-shadow: 10px 10px 0 -4px color-mix(in srgb, var(--hover) 35%, transparent);
+}
+
+.doc-card:hover .doc-thumb::after,
+.doc-card:focus-visible .doc-thumb::after {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+
+.doc-card:focus-visible {
+  outline: none;
+}
+
+.doc-title {
+  display: block;
+  margin-top: 0.85rem;
+  color: var(--ink);
+  line-height: 1.4;
+  transition: color 0.15s ease;
+}
+
+.doc-card:hover .doc-title {
+  color: var(--hover);
+}
+
+.doc-meta {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+/* PDF reader */
+.reader-pages {
+  overflow: auto;
+  padding: 1.5rem 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  min-height: 0;
+}
+
+.reader-page {
+  flex: none; /* keep each page at its full size so only visible pages render */
+  position: relative;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+  max-width: none;
+}
+
+.reader-page canvas {
+  display: block;
+  width: 100%;
+  height: 100% !important;
+}
+
+.reader-zoom {
+  min-width: 3.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 34rem) {
+  .viewer-bar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .viewer-title {
+    flex-basis: 100%;
+    order: -1;
+  }
+
+  .viewer-nav {
+    top: auto;
+    bottom: 0.75rem;
+    transform: none;
+  }
+}

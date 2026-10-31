@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Photography — Soheil Kheirabadi</title>
+    <meta name="description" content="Photography by Soheil Kheirabadi (TH45M0NK)." />
+    <meta name="author" content="Soheil Kheirabadi" />
+    <link rel="canonical" href="https://th45m0nk.github.io/projects/photography/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Soheil Kheirabadi — TH45M0NK" />
+    <meta property="og:title" content="Photography — Soheil Kheirabadi" />
+    <meta property="og:description" content="Photography by Soheil Kheirabadi (TH45M0NK)." />
+    <meta property="og:url" content="https://th45m0nk.github.io/projects/photography/" />
+    <meta property="og:image" content="https://th45m0nk.github.io/storage/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="../../projects/shared/sections.css" />
+  </head>
+  <body class="project wide">
+    <header>
+      <a class="site-name" href="../../index.html">TH45M0NK</a>
+      <nav>
+        <a href="../../index.html">Home</a>
+        <div class="nav-drop">
+          <a href="../../projects/index.html" aria-current="page">Projects</a>
+          <div class="nav-sub">
+            <a href="../../projects/siat/index.html">SIAT</a>
+            <a href="../../projects/immersive/index.html">Immersive</a>
+            <a href="../../projects/cgi-vfx/index.html">CGI/VFX</a>
+            <a href="../../projects/graphic-design/index.html">Graphic Design</a>
+            <a href="../../projects/photography/index.html">Photography</a>
+            <a href="../../projects/publications/index.html">Publications</a>
+          </div>
+        </div>
+        <a href="../../cv/index.html">CV</a>
+        <span class="nav-divider" aria-hidden="true"></span>
+        <a href="https://www.youtube.com/@th45m0nk" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/th45m0nk/" target="_blank" rel="noopener">IG</a>
+      </nav>
+    </header>
+
+    <main>
+      <a class="back" href="../index.html">&larr; Projects</a>
+
+      <h1>Photography</h1>
+      <p class="tagline">Light, places and people</p>
+
+      <!-- The photos come straight from the photos/ folder next to this
+           page. Add images there and push: they appear automatically,
+           newest file name first. See photos/README.md. -->
+      <div class="masonry" id="photos" aria-live="polite"></div>
+    </main>
+
+    <footer>
+      <p><a href="../index.html">&larr; Back to Projects</a></p>
+    </footer>
+    <script src="../shared/sections.js"></script>
+    <script>
+      (async () => {
+        const box = document.getElementById("photos");
+        let files = [];
+        try {
+          files = await TH45.listFolder("projects/photography/photos", [".jpg", ".jpeg", ".png", ".webp", ".gif"]);
+        } catch {
+          box.replaceWith(TH45.el("p", { class: "empty-note", text: "The photographs couldn't load right now. Please refresh in a minute." }));
+          return;
+        }
+        if (!files.length) {
+          box.replaceWith(TH45.el("p", { class: "empty-note", text: "Photographs coming soon." }));
+          return;
+        }
+        files.sort().reverse();
+        const items = files.map((f) => ({ title: TH45.titleFromFile(f), full: `photos/${encodeURIComponent(f)}` }));
+        box.replaceChildren(
+          ...items.map((item, i) =>
+            TH45.el(
+              "button",
+              { class: "tile", type: "button", "aria-label": `Open ${item.title}`, onclick: () => TH45.viewer.images(items, i) },
+              TH45.el("img", { src: item.full, alt: item.title, loading: "lazy", decoding: "async" }),
+              TH45.el("span", { class: "tile-caption" }, TH45.el("b", { text: item.title })),
+            ),
+          ),
+        );
+      })();
+    </script>
+  </body>
+</html>

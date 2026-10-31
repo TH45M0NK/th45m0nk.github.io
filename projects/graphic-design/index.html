@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Graphic Design — Soheil Kheirabadi</title>
+    <meta name="description" content="Graphic design by Soheil Kheirabadi: posters, logos, business cards, illustrations and social media design. Portfolio linked to ArtStation." />
+    <meta name="author" content="Soheil Kheirabadi" />
+    <link rel="canonical" href="https://th45m0nk.github.io/projects/graphic-design/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Soheil Kheirabadi — TH45M0NK" />
+    <meta property="og:title" content="Graphic Design — Soheil Kheirabadi" />
+    <meta property="og:description" content="Graphic design by Soheil Kheirabadi: posters, logos, business cards, illustrations and social media design. Portfolio linked to ArtStation." />
+    <meta property="og:url" content="https://th45m0nk.github.io/projects/graphic-design/" />
+    <meta property="og:image" content="https://th45m0nk.github.io/storage/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="../../projects/shared/sections.css" />
+  </head>
+  <body class="project wide">
+    <header>
+      <a class="site-name" href="../../index.html">TH45M0NK</a>
+      <nav>
+        <a href="../../index.html">Home</a>
+        <div class="nav-drop">
+          <a href="../../projects/index.html" aria-current="page">Projects</a>
+          <div class="nav-sub">
+            <a href="../../projects/siat/index.html">SIAT</a>
+            <a href="../../projects/immersive/index.html">Immersive</a>
+            <a href="../../projects/cgi-vfx/index.html">CGI/VFX</a>
+            <a href="../../projects/graphic-design/index.html">Graphic Design</a>
+            <a href="../../projects/photography/index.html">Photography</a>
+            <a href="../../projects/publications/index.html">Publications</a>
+          </div>
+        </div>
+        <a href="../../cv/index.html">CV</a>
+        <span class="nav-divider" aria-hidden="true"></span>
+        <a href="https://www.youtube.com/@th45m0nk" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/th45m0nk/" target="_blank" rel="noopener">IG</a>
+      </nav>
+    </header>
+
+    <main>
+      <a class="back" href="../index.html">&larr; Projects</a>
+
+      <h1>Graphic Design</h1>
+      <p class="tagline">Posters · brands · social media · illustration</p>
+
+      <div class="section-intro">
+        <p>
+          Since 2021 I have designed social media content, posters, logos and
+          illustrations: most of Bentasia Clinic's graphic content, branding for
+          PSA Gear Clothes, commercial posters and business cards, and graphics
+          for Bouquet Cafe in Vancouver. I work mainly in Figma, Illustrator and
+          Photoshop, with Midjourney for concept images.
+        </p>
+        <p>
+          <a class="pill-link" href="https://www.artstation.com/th45m0nk" target="_blank" rel="noopener">ArtStation</a>
+        </p>
+      </div>
+
+      <div class="puzzle" id="works" style="margin-top: 2rem"></div>
+    </main>
+
+    <footer>
+      <p><a href="../index.html">&larr; Back to Projects</a></p>
+    </footer>
+    <script src="../shared/sections.js"></script>
+    <script src="works.js"></script>
+    <script>
+      const items = WORKS.map((w) => ({
+        title: w.title,
+        year: w.year,
+        w: w.w,
+        h: w.h,
+        thumb: w.image.replace("/large/", "/medium/"),
+        full: w.image,
+        caption: w.note,
+        link: w.link,
+        linkText: "View on ArtStation ↗",
+      }));
+      TH45.imagePuzzle(document.getElementById("works"), items, (i) => TH45.viewer.images(items, i));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Immersive — Soheil Kheirabadi</title>
+    <meta name="description" content="Immersive work by Soheil Kheirabadi: sacred geometry studies of Platonic solids and Safavid domes, and audio-reactive TouchDesigner and Max/MSP pieces." />
+    <meta name="author" content="Soheil Kheirabadi" />
+    <link rel="canonical" href="https://th45m0nk.github.io/projects/immersive/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Soheil Kheirabadi — TH45M0NK" />
+    <meta property="og:title" content="Immersive — Soheil Kheirabadi" />
+    <meta property="og:description" content="Immersive work by Soheil Kheirabadi: sacred geometry studies of Platonic solids and Safavid domes, and audio-reactive TouchDesigner and Max/MSP pieces." />
+    <meta property="og:url" content="https://th45m0nk.github.io/projects/immersive/" />
+    <meta property="og:image" content="https://th45m0nk.github.io/storage/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="stylesheet" href="../../style.css" />
+    <link rel="stylesheet" href="../../projects/shared/sections.css" />
+  </head>
+  <body class="project wide">
+    <header>
+      <a class="site-name" href="../../index.html">TH45M0NK</a>
+      <nav>
+        <a href="../../index.html">Home</a>
+        <div class="nav-drop">
+          <a href="../../projects/index.html" aria-current="page">Projects</a>
+          <div class="nav-sub">
+            <a href="../../projects/siat/index.html">SIAT</a>
+            <a href="../../projects/immersive/index.html">Immersive</a>
+            <a href="../../projects/cgi-vfx/index.html">CGI/VFX</a>
+            <a href="../../projects/graphic-design/index.html">Graphic Design</a>
+            <a href="../../projects/photography/index.html">Photography</a>
+            <a href="../../projects/publications/index.html">Publications</a>
+          </div>
+        </div>
+        <a href="../../cv/index.html">CV</a>
+        <span class="nav-divider" aria-hidden="true"></span>
+        <a href="https://www.youtube.com/@th45m0nk" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/th45m0nk/" target="_blank" rel="noopener">IG</a>
+      </nav>
+    </header>
+
+    <main>
+      <a class="back" href="../index.html">&larr; Projects</a>
+
+      <h1>Immersive</h1>
+      <p class="tagline">Sacred geometry, sound and real-time particles</p>
+
+      <div class="section-intro">
+        <p>
+          Studies of the Platonic solids, higher dimensions and the geometry of
+          Persian domes, and audio-reactive pieces built in TouchDesigner and
+          Max/MSP. Click any piece to play it.
+        </p>
+      </div>
+
+      <h2 class="group-title">Sacred geometry <span id="count-sacred"></span></h2>
+      <div class="puzzle" id="sacred"></div>
+
+      <h2 class="group-title">TouchDesigner &amp; Max/MSP <span id="count-td"></span></h2>
+      <div class="puzzle" id="td"></div>
+
+      <p class="section-intro" style="margin-top: 2.5rem">
+        <a class="pill-link" href="https://www.youtube.com/@th45m0nk" target="_blank" rel="noopener">More on YouTube</a>
+      </p>
+    </main>
+
+    <footer>
+      <p><a href="../index.html">&larr; Back to Projects</a></p>
+    </footer>
+    <script src="../shared/sections.js"></script>
+    <script src="videos.js"></script>
+    <script>
+      TH45.videoPuzzle(document.getElementById("sacred"), SACRED_GEOMETRY);
+      TH45.videoPuzzle(document.getElementById("td"), TOUCHDESIGNER_MAXMSP);
+      document.getElementById("count-sacred").textContent = `${SACRED_GEOMETRY.length} videos`;
+      document.getElementById("count-td").textContent = `${TOUCHDESIGNER_MAXMSP.length} videos`;
+    </script>
+  </body>
+</html>

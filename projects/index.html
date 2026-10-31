@@ -4,50 +4,116 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Projects — Soheil Kheirabadi</title>
-    <meta name="description" content="Projects by Soheil Kheirabadi (TH45M0NK) — creative coding and new media work." />
+    <meta name="description" content="Projects by Soheil Kheirabadi (TH45M0NK): SIAT course work, immersive sacred geometry and TouchDesigner pieces, CGI/VFX, graphic design, photography and publications." />
     <meta name="author" content="Soheil Kheirabadi" />
     <link rel="canonical" href="https://th45m0nk.github.io/projects/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Soheil Kheirabadi — TH45M0NK" />
     <meta property="og:title" content="Projects — Soheil Kheirabadi" />
-    <meta property="og:description" content="Projects by Soheil Kheirabadi (TH45M0NK) — creative coding and new media work." />
+    <meta property="og:description" content="Projects by Soheil Kheirabadi (TH45M0NK): SIAT course work, immersive sacred geometry and TouchDesigner pieces, CGI/VFX, graphic design, photography and publications." />
     <meta property="og:url" content="https://th45m0nk.github.io/projects/" />
     <meta property="og:image" content="https://th45m0nk.github.io/storage/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <!-- ../ means "go up one folder". This page lives in projects/,
-       so ../style.css points back at the stylesheet in the main folder. -->
     <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../projects/shared/sections.css" />
   </head>
   <body>
     <header>
       <a class="site-name" href="../index.html">TH45M0NK</a>
       <nav>
         <a href="../index.html">Home</a>
-        <a href="index.html">Projects</a>
+        <div class="nav-drop">
+          <a href="../projects/index.html" aria-current="page">Projects</a>
+          <div class="nav-sub">
+            <a href="../projects/siat/index.html">SIAT</a>
+            <a href="../projects/immersive/index.html">Immersive</a>
+            <a href="../projects/cgi-vfx/index.html">CGI/VFX</a>
+            <a href="../projects/graphic-design/index.html">Graphic Design</a>
+            <a href="../projects/photography/index.html">Photography</a>
+            <a href="../projects/publications/index.html">Publications</a>
+          </div>
+        </div>
+        <a href="../cv/index.html">CV</a>
+        <span class="nav-divider" aria-hidden="true"></span>
+        <a href="https://www.youtube.com/@th45m0nk" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/th45m0nk/" target="_blank" rel="noopener">IG</a>
       </nav>
     </header>
 
     <main>
       <h1>Projects</h1>
-      <p class="tagline">Work from my courses, and things I make on my own.</p>
+      <p class="tagline">Six faces of one practice — pick a corner of the cube.</p>
 
-      <!-- Each <li> is one link. Copy a whole <li>...</li> block to add
-         another course or project. -->
-      <ul class="card-list">
-        <li>
-          <a href="iat-806/index.html">
-            <span class="title">IAT 806 — Intro to Computing</span>
-            <span class="description"
-              >Sketches, labs, and assignments in JavaScript and p5.js.</span
-            >
-          </a>
-        </li>
-      </ul>
+      <!-- The six sections sit on the corners of a hexagon: the outline
+           of a cube seen corner-on. Positions are set in
+           shared/sections.css (.t-siat, .t-immersive, ...). -->
+      <nav class="hex-hub" aria-label="Project sections">
+        <svg class="hex-lines" viewBox="0 0 100 100" aria-hidden="true">
+          <polygon class="face" opacity="0.05" points="50,50 20.56,33 50,16 79.44,33" />
+          <polygon class="face" opacity="0.025" points="50,50 79.44,33 79.44,67 50,84" />
+          <polygon class="face" opacity="0.012" points="50,50 50,84 20.56,67 20.56,33" />
+          <circle class="ring" cx="50" cy="50" r="34" />
+          <circle class="ring" cx="50" cy="50" r="48" opacity="0.5" />
+          <polygon class="rim" points="50,16 79.44,33 79.44,67 50,84 20.56,67 20.56,33" />
+          <line class="spoke sp-siat hidden-edge" x1="50" y1="50" x2="50" y2="16" />
+          <line class="spoke sp-immersive" x1="50" y1="50" x2="79.44" y2="33" />
+          <line class="spoke sp-photo hidden-edge" x1="50" y1="50" x2="79.44" y2="67" />
+          <line class="spoke sp-pub" x1="50" y1="50" x2="50" y2="84" />
+          <line class="spoke sp-graphic hidden-edge" x1="50" y1="50" x2="20.56" y2="67" />
+          <line class="spoke sp-cgi" x1="50" y1="50" x2="20.56" y2="33" />
+          <polygon class="outline ol-siat" points="50.00,-0.17 64.00,7.91 64.00,24.09 50.00,32.17 36.00,24.09 36.00,7.91" />
+          <polygon class="outline ol-immersive" points="79.44,16.83 93.44,24.91 93.44,41.09 79.44,49.17 65.44,41.09 65.44,24.91" />
+          <polygon class="outline ol-photo" points="79.44,50.83 93.44,58.91 93.44,75.09 79.44,83.17 65.44,75.09 65.44,58.91" />
+          <polygon class="outline ol-pub" points="50.00,67.83 64.00,75.91 64.00,92.09 50.00,100.17 36.00,92.09 36.00,75.91" />
+          <polygon class="outline ol-graphic" points="20.56,50.83 34.56,58.91 34.56,75.09 20.56,83.17 6.56,75.09 6.56,58.91" />
+          <polygon class="outline ol-cgi" points="20.56,16.83 34.56,24.91 34.56,41.09 20.56,49.17 6.56,41.09 6.56,24.91" />
+          <circle class="core" cx="50" cy="50" r="1.2" />
+        </svg>
+        <a class="hex-tile t-siat" href="siat/index.html">
+          <img src="shared/previews/siat.jpg" alt="" loading="lazy" decoding="async" />
+          <span class="hex-label"><strong>SIAT</strong><small>IAT 806 · course work</small></span>
+        </a>
+        <a class="hex-tile t-immersive" href="immersive/index.html">
+          <img src="https://i.ytimg.com/vi/zY9m3oyuoJs/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
+          <span class="hex-label"><strong>Immersive</strong><small>23 videos</small></span>
+        </a>
+        <a class="hex-tile t-cgi" href="cgi-vfx/index.html">
+          <img src="https://i.ytimg.com/vi/OGj0zejATdk/hqdefault.jpg" alt="" loading="lazy" decoding="async" />
+          <span class="hex-label"><strong>CGI/VFX</strong><small>3 films · 5 animations</small></span>
+        </a>
+        <a class="hex-tile t-graphic" href="graphic-design/index.html">
+          <img src="https://cdnb.artstation.com/p/assets/covers/images/071/236/213/medium/th45m0nk-th45m0nk-poster-thumb.jpg?1704751437" alt="" loading="lazy" decoding="async" />
+          <span class="hex-label"><strong>Graphic Design</strong><small>8 works</small></span>
+        </a>
+        <a class="hex-tile t-photo" href="photography/index.html">
+          <span class="hex-art" aria-hidden="true"></span>
+          <span class="hex-label"><strong>Photography</strong><small>coming soon</small></span>
+        </a>
+        <a class="hex-tile t-pub" href="publications/index.html">
+          <img src="shared/previews/publications.jpg" alt="" loading="lazy" decoding="async" />
+          <span class="hex-label"><strong>Publications</strong><small>1 paper</small></span>
+        </a>
+      </nav>
     </main>
 
     <footer>
       <p><a href="../index.html">&larr; Back home</a></p>
     </footer>
+    <script src="shared/sections.js"></script>
+    <script>
+      // Show the newest photograph on the Photography corner, if there is one.
+      TH45.listFolder("projects/photography/photos", [".jpg", ".jpeg", ".png", ".webp", ".gif"])
+        .then((files) => {
+          if (!files.length) return;
+          files.sort().reverse();
+          const tile = document.querySelector(".t-photo");
+          tile.querySelector(".hex-art").replaceWith(
+            TH45.el("img", { src: `photography/photos/${files[0]}`, alt: "", loading: "lazy" }),
+          );
+          tile.querySelector("small").textContent = `${files.length} photograph${files.length > 1 ? "s" : ""}`;
+        })
+        .catch(() => {});
+    </script>
   </body>
 </html>
