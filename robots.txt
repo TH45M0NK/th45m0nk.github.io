@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://th45m0nk.github.io/sitemap.xml
