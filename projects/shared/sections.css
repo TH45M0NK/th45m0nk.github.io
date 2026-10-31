@@ -76,10 +76,10 @@ body.wide footer {
 .hex-hub {
   position: relative;
   /* square that always fits in one screen, like the home page */
-  width: min(100%, calc(100dvh - 17rem), 42rem);
-  min-width: 18rem;
+  width: min(100%, calc(100dvh - 19.5rem), 44rem);
+  min-width: 16rem;
   aspect-ratio: 1;
-  margin: 0.5rem auto 0;
+  margin: 2.25rem auto 0;
   container-type: inline-size; /* labels scale with the hexagon, not the screen */
 }
 
@@ -143,7 +143,7 @@ body.wide footer {
   aspect-ratio: 0.866;
   transform: translate(-50%, -50%);
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  background: transparent;
+  background: #1d1b17; /* a lighter black: hides the lines behind */
   color: var(--ink);
   text-decoration: none;
   display: grid;
@@ -155,7 +155,7 @@ body.wide footer {
 
 .hex-tile:hover,
 .hex-tile:focus-visible {
-  background: transparent;
+  background: #241f17;
 }
 
 /* the hexagon's own outline: a continuous line */
@@ -241,6 +241,14 @@ body.wide footer {
   background:
     radial-gradient(circle at 50% 50%, #100e0a 0 18%, transparent 19%),
     repeating-conic-gradient(from 15deg, #2b2720 0 30deg, #1a1814 30deg 60deg);
+}
+
+/* the hub always fits in one screen: no scrolling there */
+@media (min-width: 52.01rem) {
+  body.hub-page main {
+    overflow: hidden;
+    padding-bottom: 1.5rem;
+  }
 }
 
 /* the hub's title sits centered above the hexagon */

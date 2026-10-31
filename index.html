@@ -82,15 +82,19 @@
       <h1>Hi, I'm Soheil Kheirabadi.</h1>
       <p class="tagline">Student at SFU SIAT</p>
 
-      <p>
+      <!-- Each pair is a hexadecimal character code. The script at the
+           bottom of this page shows the letter on hover or tap. -->
+      <p class="hex-code" id="hex-code">
         49 6e 20 73 69 6c 65 6e 63 65 2c 20 74 68 65 20 77 6f 72 6c 64 20 64 69
         73 61 70 70 65 61 72 73 2e
       </p>
+      <p class="hex-hint">&#x2B21; hover or tap a pair to decode it</p>
 
       <h2>What's here</h2>
       <p>
         Everything I build for the creator of all that is, lives under
-        <a href="projects/index.html">Projects</a>.
+        <a href="projects/index.html">Projects</a>. My course work for IAT 806
+        is under <a href="projects/iat-806/index.html">SIAT / IAT 806</a>.
       </p>
 
       <h2>Elsewhere</h2>
@@ -120,5 +124,25 @@
       <!-- EDIT ME -->
       <p>TH45M0NK &middot; Built for IAT 806.</p>
     </footer>
+    <script>
+      // Turn every hex pair into a small target that reveals its letter.
+      (() => {
+        const box = document.getElementById("hex-code");
+        const pairs = box.textContent.trim().split(/\s+/);
+        box.textContent = "";
+        pairs.forEach((hex, i) => {
+          const ch = String.fromCharCode(parseInt(hex, 16));
+          const span = document.createElement("span");
+          span.className = "hex-pair";
+          span.textContent = hex;
+          span.tabIndex = 0;
+          span.dataset.char = ch === " " ? "space" : ch;
+          span.setAttribute("aria-label", `${hex} = ${ch === " " ? "space" : ch}`);
+          // phones: a tap shows the letter, a second tap hides it
+          span.addEventListener("click", () => span.classList.toggle("is-open"));
+          box.append(span, i < pairs.length - 1 ? " " : "");
+        });
+      })();
+    </script>
   </body>
 </html>

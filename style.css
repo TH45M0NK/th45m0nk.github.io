@@ -284,6 +284,64 @@ a {
   color: var(--accent);
 }
 
+/* --- the hex code on the home page ---------------------------- */
+
+.hex-pair {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+  border-bottom: 1px dashed transparent;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+/* the decoded letter floats above the pair */
+.hex-pair::after {
+  content: attr(data-char);
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  min-width: 1.6em;
+  padding: 0.05rem 0.4rem;
+  border: 1px dashed var(--hover);
+  background: var(--paper);
+  color: var(--hover);
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 0.3rem);
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  z-index: 5;
+}
+
+.hex-pair:hover,
+.hex-pair:focus-visible,
+.hex-pair.is-open {
+  color: var(--hover);
+  border-bottom-color: var(--hover);
+  outline: none;
+}
+
+.hex-pair:hover::after,
+.hex-pair:focus-visible::after,
+.hex-pair.is-open::after {
+  opacity: 1;
+  transform: translate(-50%, -0.2rem);
+}
+
+.hex-hint {
+  margin-top: -0.4rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 /* --- hover on everything clickable -------------------------- */
 
 a,
