@@ -4,12 +4,12 @@ let segmentation;
 let numBalls = 1000;
 let video;
 let options = {
-  maskType: "parts",
+  maskType: "person",
 };
 
 async function setup() {
   const canvas = createCanvas(640, 480);
-
+  canvas.parent("sketch-holder");
   video = createCapture(VIDEO);
   video.size(640, 480);
   video.hide();
@@ -28,12 +28,12 @@ function draw() {
 
   if (segmentation) {
     image(segmentation.mask, 0, 0, width, height);
+    image(video, 0, 0, width, height);
   }
 
   for (let ball of balls) {
     let howMuch = 1;
-    let active = ball.containsPoint(mouseX, mouseY);
-    active = ball.isOnBody(segmentation.mask);
+    let active = segmentation ? ball.isOnBody(segmentation.mask) : false;
     ball.respond(active);
     ball.update(howMuch);
   }

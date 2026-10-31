@@ -37,7 +37,7 @@ class Ball {
 
   isOnBody(mask) {
     let px = mask.get(floor(this.x), floor(this.y)); // [r, g, b, a]
-    return px[3] < 128; // opaque = body
+    return px[3] < 128; // transparent = body
   }
 
   containsPoint(pointx, pointy) {
