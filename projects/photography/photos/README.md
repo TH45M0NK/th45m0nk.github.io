@@ -1,18 +1,24 @@
 # Photography — drop your photos here
 
 Every image in this folder appears on the Photography page automatically,
-in a masonry grid. Clicking a photo opens it full size.
+in the puzzle grid. Hovering shows the date it was taken; clicking opens it
+full size.
 
 1. Copy your photos into this folder (`.jpg`, `.jpeg`, `.png`, `.webp` or `.gif`).
 2. Commit and push in GitHub Desktop. The page updates within a minute or two.
 
+Optional, but makes the page nicer
+
+- **Date taken:** add a line for the photo in `../photo-info.js` (same file
+  name, without the extension). Photos are sorted newest first by that date.
+  Or ask Claude to "update my photo dates" and it reads them from the originals.
+- **Fast loading:** put a small copy (about 1200 px on the long side, `.webp`)
+  with the same name in `thumbs/`. The grid uses it, and the full photo opens
+  on click. Without one, the grid just uses the full photo.
+
 Tips
 
-- **Order:** photos are shown newest file name first. Start names with a
-  date to control the order, e.g. `2026-10-31-vancouver-harbour.jpg`.
-- **Titles:** the title is made from the file name. The date at the start is
-  dropped and dashes become spaces, so the example above shows as
-  "Vancouver Harbour".
-- **Size:** export at about 2500 px on the long side (around 1 MB). Camera
-  originals of 10 MB+ make the page slow, especially on phones.
+- Export at about 2500–3500 px on the long side. Camera originals of 10 MB+
+  make the page slow, especially on phones.
+- Exporting without location data keeps where you live private.
 - No spaces or `#` in file names.
