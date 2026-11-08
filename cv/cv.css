@@ -484,3 +484,15 @@ html {
     grid-template-columns: minmax(0, 1fr) 6rem;
   }
 }
+
+/* the level written out after each skill, e.g. [Advanced] */
+.skill-list .lvl {
+  color: var(--muted);
+  font-size: 0.78em;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.skill-list li[style*="5"] .lvl {
+  color: color-mix(in srgb, var(--hover) 70%, var(--muted));
+}
