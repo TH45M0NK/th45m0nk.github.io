@@ -462,6 +462,13 @@ html {
   min-width: 0;
 }
 
+/* a little extra space between one skill set and the next, so the
+   gap before a new title is bigger than the gap under a title */
+.sg-col > div + div,
+.sg-row + .sg-row {
+  margin-top: 1.75rem;
+}
+
 .cv-details .skill-list li {
   /* every row is the same height, one line or two:
      name on the left (centered), level word above the dots on the right */
