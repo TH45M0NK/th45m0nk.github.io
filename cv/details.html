@@ -233,72 +233,86 @@
         <!-- --level: 1 to 5. The word after each skill matches its level:
              1 Beginner · 2 Working knowledge · 3 Intermediate · 4 Advanced · 5 Expert.
              Level 5 is highlighted. -->
+        <!-- Two columns, each a stack of groups, so a short group
+             (2D) doesn't leave a gap next to a long one (3D). -->
         <div class="skill-groups">
-          <div>
-            <h3>2D</h3>
-            <ul class="skill-list">
-              <li style="--level: 5"><span class="sk">Adobe Photoshop</span><span class="lvl">[Expert]</span></li>
-              <li style="--level: 4"><span class="sk">Adobe Lightroom</span><span class="lvl">[Advanced]</span></li>
-              <li style="--level: 3"><span class="sk">Adobe Illustrator</span><span class="lvl">[Intermediate]</span></li>
-              <li style="--level: 2"><span class="sk">Adobe InDesign</span><span class="lvl">[Working knowledge]</span></li>
-              <li style="--level: 5"><span class="sk">Figma</span><span class="lvl">[Expert]</span></li>
-            </ul>
+          <div class="sg-row">
+            <div class="sg-col">
+              <div>
+                <h3>2D</h3>
+                <ul class="skill-list">
+                  <li style="--level: 5"><span class="sk">Adobe Photoshop</span><span class="lvl">[Expert]</span></li>
+                  <li style="--level: 4"><span class="sk">Adobe Lightroom</span><span class="lvl">[Advanced]</span></li>
+                  <li style="--level: 3"><span class="sk">Adobe Illustrator</span><span class="lvl">[Intermediate]</span></li>
+                  <li style="--level: 2"><span class="sk">Adobe InDesign</span><span class="lvl">[Working knowledge]</span></li>
+                  <li style="--level: 5"><span class="sk">Figma</span><span class="lvl">[Expert]</span></li>
+                </ul>
+              </div>
+              <div>
+                <h3>Video</h3>
+                <ul class="skill-list">
+                  <li style="--level: 5"><span class="sk">Adobe Premiere Pro</span><span class="lvl">[Expert]</span></li>
+                  <li style="--level: 5"><span class="sk">Adobe After Effects</span><span class="lvl">[Expert]</span></li>
+                  <li style="--level: 2"><span class="sk">Final Cut Pro</span><span class="lvl">[Working knowledge]</span></li>
+                </ul>
+              </div>
+              <div>
+                <h3>Visualization</h3>
+                <ul class="skill-list">
+                  <li style="--level: 4"><span class="sk">Max/MSP</span><span class="lvl">[Advanced]</span></li>
+                  <li style="--level: 4"><span class="sk">TouchDesigner</span><span class="lvl">[Advanced]</span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="sg-col">
+              <div>
+                <h3>3D</h3>
+                <ul class="skill-list">
+                  <li style="--level: 5"><span class="sk">Rhino 3D + Grasshopper</span><span class="lvl">[Expert]</span></li>
+                  <li style="--level: 5"><span class="sk">Cinema 4D</span><span class="lvl">[Expert]</span></li>
+                  <li style="--level: 3"><span class="sk">SideFX Houdini</span><span class="lvl">[Intermediate]</span></li>
+                  <li style="--level: 2"><span class="sk">Blender</span><span class="lvl">[Working knowledge]</span></li>
+                  <li style="--level: 5"><span class="sk">Redshift Renderer</span><span class="lvl">[Expert]</span></li>
+                  <li style="--level: 4"><span class="sk">V-Ray Renderer</span><span class="lvl">[Advanced]</span></li>
+                  <li style="--level: 2"><span class="sk">Unreal Engine 5</span><span class="lvl">[Working knowledge]</span></li>
+                  <li style="--level: 3"><span class="sk">Substance (Designer + Painter)</span><span class="lvl">[Intermediate]</span></li>
+                </ul>
+              </div>
+              <div>
+                <h3>Architecture</h3>
+                <ul class="skill-list">
+                  <li style="--level: 3"><span class="sk">Autodesk AutoCAD</span><span class="lvl">[Intermediate]</span></li>
+                  <li style="--level: 5"><span class="sk">Autodesk Revit Architecture</span><span class="lvl">[Expert]</span></li>
+                </ul>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3>3D</h3>
-            <ul class="skill-list">
-              <li style="--level: 5"><span class="sk">Rhino 3D + Grasshopper</span><span class="lvl">[Expert]</span></li>
-              <li style="--level: 5"><span class="sk">Cinema 4D</span><span class="lvl">[Expert]</span></li>
-              <li style="--level: 3"><span class="sk">SideFX Houdini</span><span class="lvl">[Intermediate]</span></li>
-              <li style="--level: 2"><span class="sk">Blender</span><span class="lvl">[Working knowledge]</span></li>
-              <li style="--level: 5"><span class="sk">Redshift Renderer</span><span class="lvl">[Expert]</span></li>
-              <li style="--level: 4"><span class="sk">V-Ray Renderer</span><span class="lvl">[Advanced]</span></li>
-              <li style="--level: 2"><span class="sk">Unreal Engine 5</span><span class="lvl">[Working knowledge]</span></li>
-              <li style="--level: 3"><span class="sk">Substance (Designer + Painter)</span><span class="lvl">[Intermediate]</span></li>
-            </ul>
-          </div>
-          <div>
-            <h3>Video</h3>
-            <ul class="skill-list">
-              <li style="--level: 5"><span class="sk">Adobe Premiere Pro</span><span class="lvl">[Expert]</span></li>
-              <li style="--level: 5"><span class="sk">Adobe After Effects</span><span class="lvl">[Expert]</span></li>
-              <li style="--level: 2"><span class="sk">Final Cut Pro</span><span class="lvl">[Working knowledge]</span></li>
-            </ul>
-          </div>
-          <div>
-            <h3>Architecture</h3>
-            <ul class="skill-list">
-              <li style="--level: 3"><span class="sk">Autodesk AutoCAD</span><span class="lvl">[Intermediate]</span></li>
-              <li style="--level: 5"><span class="sk">Autodesk Revit Architecture</span><span class="lvl">[Expert]</span></li>
-            </ul>
-          </div>
-          <div>
-            <h3>Visualization</h3>
-            <ul class="skill-list">
-              <li style="--level: 4"><span class="sk">Max/MSP</span><span class="lvl">[Advanced]</span></li>
-              <li style="--level: 4"><span class="sk">TouchDesigner</span><span class="lvl">[Advanced]</span></li>
-            </ul>
-          </div>
-          <div>
-            <h3>Creative coding</h3>
-            <ul class="skill-list">
-              <li style="--level: 3"><span class="sk">Visual Studio Code</span><span class="lvl">[Intermediate]</span></li>
-              <li style="--level: 2"><span class="sk">JavaScript (p5.js)</span><span class="lvl">[Working knowledge]</span></li>
-              <li style="--level: 2"><span class="sk">HTML &amp; CSS</span><span class="lvl">[Working knowledge]</span></li>
-              <li style="--level: 2"><span class="sk">Python</span><span class="lvl">[Working knowledge]</span></li>
-            </ul>
-          </div>
-          <div>
-            <h3>Utilities</h3>
-            <ul class="skill-list">
-              <li style="--level: 5"><span class="sk">Agisoft Metashape Pro (3D scanning)</span><span class="lvl">[Expert]</span></li>
-              <li style="--level: 5"><span class="sk">Microsoft Word (Google Docs)</span><span class="lvl">[Expert]</span></li>
-              <li style="--level: 3"><span class="sk">Microsoft Excel (Google Sheets)</span><span class="lvl">[Intermediate]</span></li>
-              <li style="--level: 4"><span class="sk">Git &amp; GitHub with VS Code (version control)</span><span class="lvl">[Advanced]</span></li>
-              <li style="--level: 4"><span class="sk">Generative AI tools — Claude &amp; Google Gemini (prompting, AI-assisted workflows)</span><span class="lvl">[Advanced]</span></li>
-              <li style="--level: 4"><span class="sk">Network management &amp; IT</span><span class="lvl">[Advanced]</span></li>
-              <li style="--level: 4"><span class="sk">Problem solving</span><span class="lvl">[Advanced]</span></li>
-            </ul>
+          <div class="sg-row">
+            <div class="sg-col">
+              <div>
+                <h3>Creative coding</h3>
+                <ul class="skill-list">
+                  <li style="--level: 3"><span class="sk">Visual Studio Code</span><span class="lvl">[Intermediate]</span></li>
+                  <li style="--level: 2"><span class="sk">JavaScript (p5.js)</span><span class="lvl">[Working knowledge]</span></li>
+                  <li style="--level: 2"><span class="sk">HTML &amp; CSS</span><span class="lvl">[Working knowledge]</span></li>
+                  <li style="--level: 2"><span class="sk">Python</span><span class="lvl">[Working knowledge]</span></li>
+                </ul>
+              </div>
+            </div>
+            <div class="sg-col">
+              <div>
+                <h3>Utilities</h3>
+                <ul class="skill-list">
+                  <li style="--level: 5"><span class="sk">Agisoft Metashape Pro (3D scanning)</span><span class="lvl">[Expert]</span></li>
+                  <li style="--level: 5"><span class="sk">Microsoft Word (Google Docs)</span><span class="lvl">[Expert]</span></li>
+                  <li style="--level: 3"><span class="sk">Microsoft Excel (Google Sheets)</span><span class="lvl">[Intermediate]</span></li>
+                  <li style="--level: 4"><span class="sk">Git &amp; GitHub with VS Code (version control)</span><span class="lvl">[Advanced]</span></li>
+                  <li style="--level: 4"><span class="sk">Generative AI tools — Claude &amp; Google Gemini (prompting, AI-assisted workflows)</span><span class="lvl">[Advanced]</span></li>
+                  <li style="--level: 4"><span class="sk">Network management &amp; IT</span><span class="lvl">[Advanced]</span></li>
+                  <li style="--level: 4"><span class="sk">Problem solving</span><span class="lvl">[Advanced]</span></li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>

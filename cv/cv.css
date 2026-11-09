@@ -449,11 +449,17 @@ html {
   grid-template-columns: 6rem minmax(0, 1fr);
 }
 
-/* skills: groups side by side on wide screens */
-.skill-groups {
+/* skills: two columns on wide screens. Each row has a left and a right
+   column, and each column is a stack of groups (2D, Video, Visualization
+   on the left; 3D, Architecture on the right), so there are no gaps. */
+.sg-row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
   gap: 0 3rem;
+}
+
+.sg-col {
+  min-width: 0;
 }
 
 .cv-details .skill-list li {
