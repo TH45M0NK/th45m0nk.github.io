@@ -519,7 +519,8 @@ footer p {
     grid-row: 2;
     height: 16rem;
     margin: 1.5rem 0 0;
-    background-position: center;
+    /* the portrait is half a face, so it starts from the left edge */
+    background-position: left center;
   }
 
   main {

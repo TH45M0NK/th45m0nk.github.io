@@ -275,16 +275,19 @@ body.wide footer {
 .t-graphic { --x: 20.56%; --y: 67%; }
 .t-cgi { --x: 20.56%; --y: 33%; }
 
-/* phones: a two-column honeycomb */
+/* phones: a honeycomb, rows of 2 · 1 · 2 · 1 hexagons that fit
+   into each other with an even gap all round.
+   In hexagon widths (w) of the hub: w = 48.5, gap = 3, so the
+   centre-to-centre step is 51.5 sideways and 51.5 × 0.866 = 44.6
+   downwards; a hexagon is w / 0.866 = 56 tall. The hub is
+   56 + 3 × 44.6 = 189.8 tall, and the row centres sit at
+   28, 72.6, 117.2 and 161.8 (as % of the height below). */
 @media (max-width: 34rem) {
   .hex-hub {
-    width: 100%;
+    width: 85%;
     min-width: 0;
-    aspect-ratio: auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 0.75rem;
-    padding-bottom: 4rem;
+    aspect-ratio: 100 / 189.8;
+    margin: 1.5rem auto 1rem;
   }
 
   .hex-lines {
@@ -292,36 +295,23 @@ body.wide footer {
   }
 
   .hex-tile {
-    position: relative;
-    left: auto;
-    top: auto;
-    width: 100%;
-    transform: none;
-    margin-bottom: -10%;
+    --w: 48.5%;
   }
 
-  .hex-tile:nth-of-type(even) {
-    transform: translateY(50%);
-  }
-
-  .hex-tile:hover,
-  .hex-tile:focus-visible {
-    transform: scale(1.04);
-  }
-
-  .hex-tile:nth-of-type(even):hover,
-  .hex-tile:nth-of-type(even):focus-visible {
-    transform: translateY(50%) scale(1.04);
-  }
+  .t-siat { --x: 24.25%; --y: 14.75%; }
+  .t-immersive { --x: 75.75%; --y: 14.75%; }
+  .t-cgi { --x: 50%; --y: 38.25%; }
+  .t-graphic { --x: 24.25%; --y: 61.75%; }
+  .t-photo { --x: 75.75%; --y: 61.75%; }
+  .t-pub { --x: 50%; --y: 85.25%; }
 
   .hex-label strong {
-    font-size: 5.6cqw;
+    font-size: 6.6cqw;
   }
 
   .hex-label small {
-    font-size: 3.4cqw;
+    font-size: 3.9cqw;
   }
-
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -838,7 +828,38 @@ dialog.viewer[open] {
 .reader-page canvas {
   display: block;
   width: 100%;
-  height: 100% !important;
+  height: auto !important;
+}
+
+/* preview pages can't be selected or dragged out */
+.reader-pages,
+.doc-thumb {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* the note after the last preview page */
+.reader-end {
+  flex: none;
+  max-width: 100%;
+  padding: 1.5rem 1.75rem;
+  border: 1px dashed var(--hover);
+  color: var(--ink);
+  text-align: center;
+}
+
+.reader-end strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--hover);
+  text-transform: uppercase;
+}
+
+.reader-end p {
+  margin: 0.5rem 0 0;
 }
 
 .reader-zoom {
