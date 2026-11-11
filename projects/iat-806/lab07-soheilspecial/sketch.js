@@ -17,7 +17,8 @@ let options = {
 // the emojis, drawn ONCE as little pictures. drawing a picture is way faster than drawing text.
 let emojiPictures = {};
 
-// the colors of the balls: cyan, dark blue and disgust green
+// the colors of the balls: anything between these three
+// #004D26 (dark green), #00A4B2 (cyan) and #005999 (blue)
 let ballColors;
 
 async function setup() {
@@ -27,11 +28,7 @@ async function setup() {
   emojiPictures["🤢"] = makeEmojiPicture("🤢");
   emojiPictures["🤮"] = makeEmojiPicture("🤮");
 
-  ballColors = [
-    color(0, 255, 255, 60), // cyan
-    color(10, 30, 150, 110), // dark blue
-    color(120, 170, 30, 80), // disgust green
-  ];
+  ballColors = [color("#004D26"), color("#00A4B2"), color("#005999")];
 
   for (let i = 0; i < numBalls; i++) {
     balls.push(createRandomBall());
@@ -69,7 +66,7 @@ function draw() {
 function createRandomBall() {
   let ballX = random(0, width);
   let ballY = random(0, height);
-  let ballC = random(ballColors);
+  let ballC = randomBallColor();
   let ballR = 5;
   let randomNumber = Math.random();
   if (randomNumber < 0.2) {
@@ -93,4 +90,18 @@ function makeEmojiPicture(emoji) {
   pic.textAlign(CENTER, CENTER);
   pic.text(emoji, 32, 36);
   return pic;
+}
+
+// picks a color somewhere between the three ballColors (not only those three).
+function randomBallColor() {
+  let t = random(0, 2); // 0 to 1 = green to cyan, 1 to 2 = cyan to blue
+  let c;
+  if (t < 1) {
+    c = lerpColor(ballColors[0], ballColors[1], t);
+  } else {
+    c = lerpColor(ballColors[1], ballColors[2], t - 1);
+  }
+  // a little see-through, like before
+  c.setAlpha(110);
+  return c;
 }

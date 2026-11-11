@@ -17,6 +17,10 @@ class Ball {
 
     this.baseR = r;
     this.r = r;
+    // how much this ball can grow and shrink: between 25% and 35% of its size
+    this.sizeRange = random(0.25, 0.35);
+    // every ball gets its own spot in the noise, so they don't all breathe together
+    this.noiseSeed = random(1000);
     this.origColor = fillColor;
     this.fillColor = fillColor;
     this.highlightColor = color(100, 100, 100, 50);
@@ -33,7 +37,12 @@ class Ball {
   }
 
   changeSize(byHowMuch) {
-    this.r = constrain(this.r + random(-byHowMuch, byHowMuch), 2, 30);
+    // random() jumps to a new size every frame = flickering.
+    // noise() is smooth randomness, so the size slowly breathes instead.
+    // byHowMuch is the speed now (small = slow).
+    let n = noise(this.noiseSeed + frameCount * byHowMuch); // 0 to 1
+    // from (1 - half the range) to (1 + half the range), e.g. 0.85 to 1.15
+    this.r = this.baseR * (1 + (n - 0.5) * this.sizeRange);
   }
 
   contains(px, py) {
@@ -78,7 +87,7 @@ class BubblyBall extends Ball {
     super.respond(active);
     // we can do new things here...
     // update it.
-    this.changeSize(6);
+    this.changeSize(0.01);
   }
 }
 
@@ -98,6 +107,8 @@ class flirtyBall extends Ball {
     if (active) {
       // bigger emojis, so we need fewer of them (and the code runs faster)
       this.sizeMultiplier = 7;
+      // emojis breathe too, so they're not all the same size
+      this.changeSize(0.02);
       // it just appeared? JUMP!
       if (!this.wasActive) this.vy = -random(3, 6);
       this.bounce();
