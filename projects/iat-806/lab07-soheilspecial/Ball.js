@@ -58,8 +58,11 @@ class Ball {
   }
 
   isOnBody(mask) {
-    let px = mask.get(floor(this.x), floor(this.y)); // [r, g, b, a]
-    return px[3] < 128; // opaque = body
+    // mask.get() asks the image for ONE pixel, 3000 times a frame... super slow.
+    // so in draw() we call mask.loadPixels() once, and here we just read the list.
+    // every pixel is 4 numbers in a row: r, g, b, a
+    let i = (floor(this.y) * mask.width + floor(this.x)) * 4;
+    return mask.pixels[i + 3] < 128; // opaque = body
   }
 
   show() {
@@ -82,20 +85,54 @@ class BubblyBall extends Ball {
 class flirtyBall extends Ball {
   constructor(x, y, fillColor, r) {
     super(x, y, fillColor, r);
-    this.emojiText = "😋";
+    this.emojiText = "🤢";
     this.sizeMultiplier = 1;
+    // how high the emoji is in the air (0 = on the ground, negative = up)
+    this.jumpY = 0;
+    // jump speed. negative goes up, positive comes down.
+    this.vy = 0;
+    this.wasActive = false;
   }
 
   respond(active) {
     if (active) {
-      this.sizeMultiplier = 4;
+      // bigger emojis, so we need fewer of them (and the code runs faster)
+      this.sizeMultiplier = 7;
+      // it just appeared? JUMP!
+      if (!this.wasActive) this.vy = -random(3, 6);
+      this.bounce();
     } else {
       this.sizeMultiplier = 0.1;
+      this.jumpY = 0;
+    }
+    this.wasActive = active;
+  }
+
+  bounce() {
+    this.vy += 0.5; // gravity
+    this.jumpY += this.vy;
+    // hit the ground: jump again, and switch 🤢 <-> 🤮
+    if (this.jumpY > 0) {
+      this.jumpY = 0;
+      this.vy = -random(4, 7);
+      if (this.emojiText === "🤢") {
+        this.emojiText = "🤮";
+      } else {
+        this.emojiText = "🤢";
+      }
     }
   }
+
   show() {
-    textSize(this.r * this.sizeMultiplier);
-    textAlign(CENTER, CENTER);
-    text(this.emojiText, this.x, this.y);
+    // when it's tiny you can't see the emoji anyway, so just draw a dot.
+    if (!this.wasActive) {
+      super.show();
+      return;
+    }
+    // drawing the emoji as text is SLOW (the font draws it again every time),
+    // so we use the pictures we made once in setup() (see emojiPictures in sketch.js)
+    let s = this.r * this.sizeMultiplier;
+    imageMode(CENTER);
+    image(emojiPictures[this.emojiText], this.x, this.y + this.jumpY, s, s);
   }
 }
