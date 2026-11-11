@@ -18,7 +18,7 @@ class Ball {
     this.baseR = r;
     this.r = r;
     // how much this ball can grow and shrink: between 25% and 35% of its size
-    this.sizeRange = random(0.4, 0.8);
+    this.sizeRange = random(1, 2);
     // every ball gets its own spot in the noise, so they don't all breathe together
     this.noiseSeed = random(1000);
     this.origColor = fillColor;
@@ -95,7 +95,7 @@ class flirtyBall extends Ball {
   constructor(x, y, fillColor, r) {
     super(x, y, fillColor, r);
     this.emojiText = "🤢";
-    this.sizeMultiplier = 1;
+    this.sizeMultiplier = random(1, 2);
     // how high the emoji is in the air (0 = on the ground, negative = up)
     this.jumpY = 0;
     // jump speed. negative goes up, positive comes down.
@@ -113,7 +113,7 @@ class flirtyBall extends Ball {
       if (!this.wasActive) this.vy = -random(3, 6);
       this.bounce();
     } else {
-      this.sizeMultiplier = 0.1;
+      this.sizeMultiplier = random(0.75, 1.5);
       this.jumpY = 0;
     }
     this.wasActive = active;
