@@ -18,7 +18,7 @@ class Ball {
     this.baseR = r;
     this.r = r;
     // how much this ball can grow and shrink: between 25% and 35% of its size
-    this.sizeRange = random(0.25, 0.35);
+    this.sizeRange = random(0.4, 0.8);
     // every ball gets its own spot in the noise, so they don't all breathe together
     this.noiseSeed = random(1000);
     this.origColor = fillColor;
