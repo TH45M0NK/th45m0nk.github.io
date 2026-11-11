@@ -15,7 +15,8 @@ let options = {
 };
 
 async function setup() {
-  createCanvas(800, 600);
+  const canvas = createCanvas(800, 600);
+  canvas.parent("sketch-holder");
   for (let i = 0; i < numBalls; i++) {
     balls.push(createRandomBall());
   }
