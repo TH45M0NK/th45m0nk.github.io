@@ -10,14 +10,14 @@ let options = {
   maskType: "person",
 };
 
-// outline of the body: how far the edge of the mask is from your middle, in 64 directions.
+// the outline of the body: how far the edge of the mask is from your middle, in 64 directions.
 let numRays = 64;
 let radii = [];
 let centerX = 0;
 let centerY = 0;
 
 // how jagged the outline is. 0 is a circle, a bigger number is more arms, elbows, shoulders...
-// this one moves slowly, so the geometry doesn't flicker.
+// it moves slowly, so the geometry doesn't flicker.
 let jagged = 0;
 // the jagged numbers where the geometry is the simplest and the most complex. play with them!
 let simpleAt = 1;
@@ -26,7 +26,6 @@ let complexAt = 6;
 let complexity = 0; // jagged, but between 0 and 1
 let minBalls = 3;
 let maxBalls = 24;
-let numBalls = minBalls;
 
 // the geometries, from the simplest. upTo is the most balls it can have.
 let levels = [
@@ -36,7 +35,7 @@ let levels = [
   { name: "Metatron's Cube", upTo: 16, points: 400 },
   { name: "E8-inspired", upTo: 24, points: 1000 },
 ];
-let found = []; // the geometries you have already got points for
+let found = []; // the geometries you already got points for
 let score = 0;
 
 // the reset button
@@ -87,19 +86,27 @@ function gotResults(result) {
   segmentation = result;
 }
 
+// a pixel that is not see-through (alpha 128 or more) is the background,
+// so a see-through pixel is your body.
+function isBody(x, y) {
+  let mask = segmentation.mask;
+  let mx = floor((x * mask.width) / width);
+  let my = floor((y * mask.height) / height);
+  if (mx < 0 || my < 0 || mx >= mask.width || my >= mask.height) return false;
+  let i = (my * mask.width + mx) * 4; // every pixel is 4 numbers: r, g, b, a
+  return mask.pixels[i + 3] < 128;
+}
+
 // look at the mask and find out how jagged the outline is.
 // gives back false if there is nobody on the screen.
 function measureOutline() {
-  let mask = segmentation.mask;
-  let scale = mask.width / width;
-
   // the middle of your body is the average of all the body pixels (we look at every 8th pixel)
   let sumX = 0;
   let sumY = 0;
   let count = 0;
   for (let y = 0; y < height; y += 8) {
     for (let x = 0; x < width; x += 8) {
-      if (isBody(mask, x * scale, y * scale)) {
+      if (isBody(x, y)) {
         sumX += x;
         sumY += y;
         count++;
@@ -115,7 +122,7 @@ function measureOutline() {
   for (let i = 0; i < numRays; i++) {
     let angle = (TWO_PI * i) / numRays;
     let r = 0;
-    while (r < width && isBody(mask, (centerX + cos(angle) * r) * scale, (centerY + sin(angle) * r) * scale)) {
+    while (r < width && isBody(centerX + cos(angle) * r, centerY + sin(angle) * r)) {
       r += 4;
     }
     rough[i] = r;
@@ -142,37 +149,20 @@ function measureOutline() {
   return true;
 }
 
-// a pixel that is not see-through (alpha 128 or more) is the background,
-// so a see-through pixel is your body.
-function isBody(mask, mx, my) {
-  if (mx < 0 || my < 0 || mx >= mask.width || my >= mask.height) return false;
-  let i = (floor(my) * mask.width + floor(mx)) * 4; // every pixel is 4 numbers: r, g, b, a
-  return mask.pixels[i + 3] < 128;
-}
-
 // more complexity means more balls, and the balls sit on your outline.
 function updateBalls() {
-  let wanted = map(complexity, 0, 1, minBalls, maxBalls);
-  // only change the number when it is a bit far from the old one, so it doesn't flip between two numbers
-  if (abs(wanted - numBalls) > 0.7) numBalls = round(wanted);
+  let numBalls = round(map(complexity, 0, 1, minBalls, maxBalls));
 
   // new balls are born in your middle and slide out. extra balls are removed.
-  while (balls.length < numBalls) balls.push(createBall());
+  while (balls.length < numBalls) balls.push(new Ball(centerX, centerY, color(255), 8));
   while (balls.length > numBalls) balls.pop();
 
   for (let i = 0; i < balls.length; i++) {
     let ray = floor((i * numRays) / balls.length);
     let angle = (TWO_PI * ray) / numRays;
-    balls[i].goTo(centerX + cos(angle) * radii[ray], centerY + sin(angle) * radii[ray]);
-  }
-}
-
-function createBall() {
-  let ballC = color(255);
-  if (numBalls > 8) {
-    return new SmallBall(centerX, centerY, ballC, 12);
-  } else {
-    return new Ball(centerX, centerY, ballC, 8);
+    // a little bit inside the outline, so the ball is really on the body
+    let r = max(radii[ray] - 8, 0);
+    balls[i].goTo(centerX + cos(angle) * r, centerY + sin(angle) * r);
   }
 }
 
@@ -190,6 +180,7 @@ function drawOutline() {
 }
 
 // every ball is joined to the balls next to it. when it is complex, it is also joined to the ones further away.
+// a link only stays if all of it is inside your body. if it goes outside, we skip it.
 function drawLinks() {
   let reach = 1 + floor(complexity * (balls.length / 2 - 1));
   stroke(255, 170);
@@ -197,14 +188,25 @@ function drawLinks() {
   for (let i = 0; i < balls.length; i++) {
     for (let step = 1; step <= reach; step++) {
       let other = balls[(i + step) % balls.length];
-      line(balls[i].x, balls[i].y, other.x, other.y);
+      if (isInside(balls[i], other)) {
+        line(balls[i].x, balls[i].y, other.x, other.y);
+      }
     }
   }
 }
 
+// walk along the link from one ball to the other. if we touch the background, it is not inside.
+function isInside(a, b) {
+  let steps = ceil(dist(a.x, a.y, b.x, b.y) / 8);
+  for (let i = 0; i <= steps; i++) {
+    if (!isBody(lerp(a.x, b.x, i / steps), lerp(a.y, b.y, i / steps))) return false;
+  }
+  return true;
+}
+
 // the geometry that has this number of balls
 function currentLevel() {
-  return levels.find((l) => numBalls <= l.upTo);
+  return levels.find((l) => balls.length <= l.upTo);
 }
 
 // the first time you get to a geometry you get its points
@@ -249,6 +251,5 @@ function mousePressed() {
     score = 0;
     found = [];
     jagged = 0;
-    numBalls = minBalls;
   }
 }

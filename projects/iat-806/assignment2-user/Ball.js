@@ -4,7 +4,7 @@
 // this is a blueprint for creating stuff.
 // We can create new balls using this.
 
-// in this version there is no dust. a ball is a corner of the geometry.
+// a ball is a corner of the geometry.
 class Ball {
   // x is x position
   // y is y position
@@ -41,14 +41,5 @@ class Ball {
     circle(this.x, this.y, this.r * 3);
     fill(this.fillColor);
     circle(this.x, this.y, this.r);
-  }
-}
-
-// when the geometry gets complex there are many corners, so they are smaller.
-class SmallBall extends Ball {
-  show() {
-    noStroke();
-    fill(this.fillColor);
-    circle(this.x, this.y, this.r * 0.6);
   }
 }
