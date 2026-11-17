@@ -297,11 +297,11 @@ function drawMessage(words) {
 
 function keyPressed(event) {
   // up and down change the spacing between nodes. we stop the page from scrolling.
-  if (keyCode === UP_ARROW) {
+  if (key === "ArrowUp") {
     spacing = min(spacing + 10, 120);
     event.preventDefault();
   }
-  if (keyCode === DOWN_ARROW) {
+  if (key === "ArrowDown") {
     spacing = max(spacing - 10, 30);
     event.preventDefault();
   }
