@@ -1,10 +1,6 @@
 // an array to put all the balls in.
+// the balls are the corners of the geometry.
 let balls = [];
-// numBalls is written in camelCase.
-// this is the number of dust balls that you want to create.
-let numBalls = 1200;
-// the nodes are the corners of the geometry. they are balls too.
-let nodes = [];
 
 let bodySegmentation;
 let video;
@@ -20,7 +16,7 @@ let radii = [];
 let centerX = 0;
 let centerY = 0;
 
-// how jagged the outline is. 0 is a circle, a bigger number is more arms, fingers, elbows...
+// how jagged the outline is. 0 is a circle, a bigger number is more arms, elbows, shoulders...
 // this one moves slowly, so the geometry doesn't flicker.
 let jagged = 0;
 // the jagged numbers where the geometry is the simplest and the most complex. play with them!
@@ -28,16 +24,30 @@ let simpleAt = 1;
 let complexAt = 6;
 
 let complexity = 0; // jagged, but between 0 and 1
-let minNodes = 3;
-let maxNodes = 24;
-let nodeCount = minNodes;
+let minBalls = 3;
+let maxBalls = 24;
+let numBalls = minBalls;
+
+// the geometries, from the simplest. upTo is the most balls it can have.
+let levels = [
+  { name: "Triangle", upTo: 3, points: 30 },
+  { name: "Tetrahedron", upTo: 4, points: 60 },
+  { name: "Hexagon", upTo: 8, points: 100 },
+  { name: "Metatron's Cube", upTo: 16, points: 400 },
+  { name: "E8-inspired", upTo: 24, points: 1000 },
+];
+let found = []; // the geometries you have already got points for
+let score = 0;
+
+// the reset button
+let buttonX = 708;
+let buttonY = 18;
+let buttonW = 72;
+let buttonH = 28;
 
 async function setup() {
   const canvas = createCanvas(800, 600);
   canvas.parent("sketch-holder");
-  for (let i = 0; i < numBalls; i++) {
-    balls.push(createRandomBall());
-  }
 
   bodySegmentation = await ml5.bodySegmentation("SelfieSegmentation", options);
 
@@ -50,42 +60,27 @@ async function setup() {
 }
 
 function draw() {
-  background(32);
+  background(0);
   // to see the camera video.
   //image(video, 0, 0);
 
   if (segmentation) segmentation.mask.loadPixels();
 
-  for (let ball of balls) {
-    let onBody = segmentation && ball.isOnBody(segmentation.mask);
-    ball.respond(onBody);
-    ball.update(1);
-  }
-
   if (segmentation && measureOutline()) {
-    updateNodes();
+    updateBalls();
+    drawOutline();
     drawLinks();
+    for (let ball of balls) {
+      ball.update();
+    }
+    giveScore();
   } else {
     // nobody there, so no geometry
-    nodes = [];
-  }
-  for (let node of nodes) {
-    node.update();
+    balls = [];
   }
 
   showWords();
-}
-
-function createRandomBall() {
-  let ballX = random(0, width);
-  let ballY = random(0, height);
-  let ballC = color(120, 160, 200, 40);
-  let ballR = 2;
-  if (Math.random() < 0.3) {
-    return new BubblyBall(ballX, ballY, ballC, ballR);
-  } else {
-    return new Ball(ballX, ballY, ballC, ballR);
-  }
+  showButton();
 }
 
 function gotResults(result) {
@@ -104,7 +99,7 @@ function measureOutline() {
   let count = 0;
   for (let y = 0; y < height; y += 8) {
     for (let x = 0; x < width; x += 8) {
-      if (maskIsBody(mask, x * scale, y * scale)) {
+      if (isBody(mask, x * scale, y * scale)) {
         sumX += x;
         sumY += y;
         count++;
@@ -120,7 +115,7 @@ function measureOutline() {
   for (let i = 0; i < numRays; i++) {
     let angle = (TWO_PI * i) / numRays;
     let r = 0;
-    while (r < width && maskIsBody(mask, (centerX + cos(angle) * r) * scale, (centerY + sin(angle) * r) * scale)) {
+    while (r < width && isBody(mask, (centerX + cos(angle) * r) * scale, (centerY + sin(angle) * r) * scale)) {
       r += 4;
     }
     rough[i] = r;
@@ -147,62 +142,113 @@ function measureOutline() {
   return true;
 }
 
-function maskIsBody(mask, mx, my) {
+// a pixel that is not see-through (alpha 128 or more) is the background,
+// so a see-through pixel is your body.
+function isBody(mask, mx, my) {
   if (mx < 0 || my < 0 || mx >= mask.width || my >= mask.height) return false;
-  let i = (floor(my) * mask.width + floor(mx)) * 4;
+  let i = (floor(my) * mask.width + floor(mx)) * 4; // every pixel is 4 numbers: r, g, b, a
   return mask.pixels[i + 3] < 128;
 }
 
-// more complexity means more nodes, and the nodes sit on your outline.
-function updateNodes() {
-  let wanted = map(complexity, 0, 1, minNodes, maxNodes);
+// more complexity means more balls, and the balls sit on your outline.
+function updateBalls() {
+  let wanted = map(complexity, 0, 1, minBalls, maxBalls);
   // only change the number when it is a bit far from the old one, so it doesn't flip between two numbers
-  if (abs(wanted - nodeCount) > 0.7) nodeCount = round(wanted);
+  if (abs(wanted - numBalls) > 0.7) numBalls = round(wanted);
 
-  // new nodes are born in your middle and slide out. extra nodes are removed.
-  while (nodes.length < nodeCount) nodes.push(new NodeBall(centerX, centerY));
-  while (nodes.length > nodeCount) nodes.pop();
+  // new balls are born in your middle and slide out. extra balls are removed.
+  while (balls.length < numBalls) balls.push(createBall());
+  while (balls.length > numBalls) balls.pop();
 
-  for (let i = 0; i < nodes.length; i++) {
-    let ray = floor((i * numRays) / nodes.length);
+  for (let i = 0; i < balls.length; i++) {
+    let ray = floor((i * numRays) / balls.length);
     let angle = (TWO_PI * ray) / numRays;
-    nodes[i].goTo(centerX + cos(angle) * radii[ray], centerY + sin(angle) * radii[ray]);
+    balls[i].goTo(centerX + cos(angle) * radii[ray], centerY + sin(angle) * radii[ray]);
   }
 }
 
-// every node is joined to the nodes next to it. when it is complex, it is also joined to the ones further away.
+function createBall() {
+  let ballC = color(255);
+  if (numBalls > 8) {
+    return new SmallBall(centerX, centerY, ballC, 12);
+  } else {
+    return new Ball(centerX, centerY, ballC, 8);
+  }
+}
+
+// the outline of your body
+function drawOutline() {
+  noFill();
+  stroke(255);
+  strokeWeight(1.6);
+  beginShape();
+  for (let i = 0; i < numRays; i++) {
+    let angle = (TWO_PI * i) / numRays;
+    vertex(centerX + cos(angle) * radii[i], centerY + sin(angle) * radii[i]);
+  }
+  endShape(CLOSE);
+}
+
+// every ball is joined to the balls next to it. when it is complex, it is also joined to the ones further away.
 function drawLinks() {
-  let reach = 1 + floor(complexity * (nodes.length / 2 - 1));
-  stroke(253, 253, 251, 90);
+  let reach = 1 + floor(complexity * (balls.length / 2 - 1));
+  stroke(255, 170);
   strokeWeight(1);
-  for (let i = 0; i < nodes.length; i++) {
+  for (let i = 0; i < balls.length; i++) {
     for (let step = 1; step <= reach; step++) {
-      let other = nodes[(i + step) % nodes.length];
-      line(nodes[i].x, nodes[i].y, other.x, other.y);
+      let other = balls[(i + step) % balls.length];
+      line(balls[i].x, balls[i].y, other.x, other.y);
     }
+  }
+}
+
+// the geometry that has this number of balls
+function currentLevel() {
+  return levels.find((l) => numBalls <= l.upTo);
+}
+
+// the first time you get to a geometry you get its points
+function giveScore() {
+  let level = currentLevel();
+  if (!found.includes(level)) {
+    found.push(level);
+    score += level.points;
   }
 }
 
 function showWords() {
   noStroke();
-  fill(253, 253, 251);
-  textSize(16);
+  fill(255);
+  textFont("sans-serif");
+  textSize(11);
   textAlign(LEFT, TOP);
-  if (nodes.length === 0) {
-    text("step in front of the camera", 16, 12);
-    return;
+  text("SCORE " + nf(score, 5), 20, 20);
+  if (balls.length > 0) {
+    text(currentLevel().name.toUpperCase() + "  " + balls.length, 20, 38);
+  } else {
+    text("STEP IN FRONT OF THE CAMERA", 20, 38);
   }
-  text(nodes.length + " nodes  " + nameOf(nodes.length), 16, 12);
-  text("open your arms to make it more complex, hug yourself to make it simpler", 16, 34);
   // to set simpleAt and complexAt, uncomment this and look at the number
-  //text("jagged " + nf(jagged, 1, 2), 16, 56);
+  //text("JAGGED " + nf(jagged, 1, 2), 20, 56);
 }
 
-// the name of the geometry that looks like our number of nodes
-function nameOf(n) {
-  if (n <= 3) return "Triangle";
-  if (n <= 4) return "Tetrahedron";
-  if (n <= 8) return "Hexagon";
-  if (n <= 16) return "Metatron's Cube";
-  return "E8-inspired";
+function showButton() {
+  noFill();
+  stroke(255, 180);
+  strokeWeight(1);
+  rect(buttonX, buttonY, buttonW, buttonH, 14);
+  noStroke();
+  fill(255);
+  textSize(9);
+  textAlign(CENTER, CENTER);
+  text("RESET", buttonX + buttonW / 2, buttonY + buttonH / 2);
+}
+
+function mousePressed() {
+  if (mouseX > buttonX && mouseX < buttonX + buttonW && mouseY > buttonY && mouseY < buttonY + buttonH) {
+    score = 0;
+    found = [];
+    jagged = 0;
+    numBalls = minBalls;
+  }
 }
