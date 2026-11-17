@@ -19,29 +19,18 @@ let options = {
 // ---------------------------------------------------------------
 
 // how far apart the nodes are (in pixels). a smaller number gives you more nodes.
-// press the up and down arrows to change it while you play.
 let spacing = 60;
 // the most nodes we can have
 let maxNodes = 60;
-// how long you have to hold still to lock in a geometry (in milliseconds)
-let holdTime = 1200;
 // the size of the mouse brush. hold the mouse down to make nodes without a camera.
 let brush = 90;
 
-let geometries; // all the geometries (see Geometry.js)
-let found = []; // the geometries you have found
 let nodes = []; // the balls that are corners right now
-let score = 0;
-let hold = 0; // how long you have held the same number of nodes
-let lastCount = 0;
-let lastGeometry; // the geometry that you locked last
-let reward; // the geometry that is spinning on the screen after you lock it
+let score = 0; // the most nodes you have made at the same time
 
 async function setup() {
   const canvas = createCanvas(800, 600);
   canvas.parent("sketch-holder");
-
-  geometries = makeGeometries();
 
   for (let i = 0; i < numBalls; i++) {
     balls.push(createRandomBall());
@@ -84,7 +73,8 @@ function draw() {
     ball.update(1);
   }
 
-  playGame();
+  // the score is the most nodes you have made at the same time
+  score = max(score, nodes.length);
   drawHud();
 }
 
@@ -135,98 +125,6 @@ function drawWeb() {
 }
 
 // ---------------------------------------------------------------
-// the rules
-// ---------------------------------------------------------------
-
-function playGame() {
-  let geometry = findGeometry(geometries, nodes.length, found);
-
-  // no geometry for this number of nodes: you have to build one again to score.
-  if (!geometry) lastGeometry = undefined;
-
-  // hold the same number of nodes for a moment. if it changes for a frame or two, it's ok.
-  if (geometry && nodes.length === lastCount) hold = min(hold + deltaTime, holdTime);
-  else hold = max(0, hold - deltaTime * 2);
-  lastCount = nodes.length;
-
-  if (geometry && geometry !== lastGeometry && hold >= holdTime) {
-    lockGeometry(geometry);
-  }
-
-  // a ring that fills up around your shape while you hold still.
-  if (geometry && geometry !== lastGeometry) {
-    let c = centerOf(nodes);
-    noFill();
-    stroke(255, 170, 0);
-    strokeWeight(4);
-    arc(c.x, c.y, 80, 80, -HALF_PI, -HALF_PI + TWO_PI * min(hold / holdTime, 1));
-  }
-
-  if (reward) drawReward();
-}
-
-function lockGeometry(geometry) {
-  let isNew = !found.includes(geometry);
-  let points = geometry.score;
-  // the first time you find a geometry, you get double.
-  if (isNew) {
-    points = points * 2;
-    found.push(geometry);
-  }
-  score += points;
-  lastGeometry = geometry;
-  hold = 0;
-
-  let c = centerOf(nodes);
-  reward = {
-    geometry: geometry,
-    x: c.x,
-    y: c.y,
-    size: constrain(radiusOf(nodes, c), 60, 220),
-    born: millis(),
-    text: "+" + points + "  " + geometry.name + (isNew ? "  NEW!" : ""),
-  };
-}
-
-// the middle of all the nodes
-function centerOf(list) {
-  let x = 0;
-  let y = 0;
-  for (let n of list) {
-    x += n.x;
-    y += n.y;
-  }
-  return { x: x / list.length, y: y / list.length };
-}
-
-// how far the farthest node is from the middle
-function radiusOf(list, c) {
-  let farthest = 0;
-  for (let n of list) {
-    farthest = max(farthest, dist(n.x, n.y, c.x, c.y));
-  }
-  return farthest;
-}
-
-// the perfect geometry spins over your nodes for 3 seconds, then fades.
-function drawReward() {
-  let age = millis() - reward.born;
-  if (age > 3000) {
-    reward = undefined;
-    return;
-  }
-  let alpha = 255 * (1 - age / 3000);
-  reward.geometry.draw(reward.x, reward.y, reward.size, age * 0.0008, alpha);
-
-  noStroke();
-  fill(253, 253, 251, alpha);
-  textFont("VT323");
-  textSize(34);
-  textAlign(CENTER, CENTER);
-  text(reward.text, reward.x, constrain(reward.y - reward.size - 24, 110, height - 120));
-}
-
-// ---------------------------------------------------------------
 // the words and numbers on the screen
 // ---------------------------------------------------------------
 
@@ -236,52 +134,18 @@ function drawHud() {
   textFont("VT323");
   textSize(30);
   textAlign(LEFT, TOP);
-  text("SCORE " + nf(score, 5), 16, 10);
+  text("SCORE " + nf(score, 3), 16, 10);
   textAlign(RIGHT, TOP);
   text(nodes.length + " NODES", width - 16, 10);
 
-  // a hint: what geometry are you making, or what could you make?
+  // a hint
   textSize(20);
   fill(253, 253, 251, 190);
-  let geometry = findGeometry(geometries, nodes.length, found);
-  let hint;
-  if (!segmentation && !mouseIsPressed) {
-    hint = "step in front of the camera (or hold the mouse down)";
-  } else if (geometry) {
-    hint = geometry.name.toUpperCase() + (geometry === lastGeometry ? "  - found it, change the shape" : "  - hold still");
-  } else {
-    let next = nearestGeometry();
-    hint = "make " + next.count + " nodes for a " + next.name + (next.count > nodes.length ? " - step closer or open your arms" : " - step back");
-  }
   textAlign(CENTER, TOP);
-  text(hint, width / 2, 46);
-
-  drawCodex();
-}
-
-// the geometry that is closest to the number of nodes you have, to help the player.
-function nearestGeometry() {
-  let sorted = geometries.slice();
-  sorted.sort((a, b) => abs(a.count - nodes.length) - abs(b.count - nodes.length));
-  return sorted[0];
-}
-
-// the row of geometries at the bottom. the ones you found light up.
-function drawCodex() {
-  let w = width / geometries.length;
-  for (let i = 0; i < geometries.length; i++) {
-    let g = geometries[i];
-    let isFound = found.includes(g);
-    let x = w * (i + 0.5);
-    g.draw(x, height - 56, 20, millis() * 0.0006, isFound ? 255 : 60);
-
-    noStroke();
-    fill(253, 253, 251, isFound ? 255 : 90);
-    textFont("Share Tech Mono");
-    textSize(11);
-    textAlign(CENTER, TOP);
-    text(g.name.split(" ")[0], x, height - 28);
-    text(g.orMore ? g.count + "+" : g.count, x, height - 15);
+  if (!segmentation && !mouseIsPressed) {
+    text("step in front of the camera (or hold the mouse down)", width / 2, 46);
+  } else {
+    text("step closer or open your arms to make more nodes", width / 2, 46);
   }
 }
 
@@ -295,20 +159,7 @@ function drawMessage(words) {
   text(words, width / 2, height / 2);
 }
 
-function keyPressed(event) {
-  // up and down change the spacing between nodes. we stop the page from scrolling.
-  if (key === "ArrowUp") {
-    spacing = min(spacing + 10, 120);
-    event.preventDefault();
-  }
-  if (key === "ArrowDown") {
-    spacing = max(spacing - 10, 30);
-    event.preventDefault();
-  }
+function keyPressed() {
   // r starts again
-  if (key === "r") {
-    score = 0;
-    found = [];
-    lastGeometry = undefined;
-  }
+  if (key === "r") score = 0;
 }

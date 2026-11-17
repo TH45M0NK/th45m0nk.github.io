@@ -7,13 +7,13 @@
     <link rel="icon" href="../../../favicon.ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="../../../apple-touch-icon.png" />
     <title>Assignment 2 — BodyGame [A.I Assisted] — Soheil Kheirabadi</title>
-    <meta name="description" content="Assignment 2 — BodyGame [A.I Assisted] — a webcam game by Soheil Kheirabadi (TH45M0NK) for IAT 806 at SIAT, Simon Fraser University. Your body makes the nodes, the nodes make sacred geometry." />
+    <meta name="description" content="Assignment 2 — BodyGame [A.I Assisted] — a webcam game by Soheil Kheirabadi (TH45M0NK) for IAT 806 at SIAT, Simon Fraser University. Your body makes the nodes, and the nodes join into a network." />
     <meta name="author" content="Soheil Kheirabadi" />
     <link rel="canonical" href="https://th45m0nk.github.io/projects/iat-806/assignment2-bodygame/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Soheil Kheirabadi — TH45M0NK" />
     <meta property="og:title" content="Assignment 2 — BodyGame [A.I Assisted] — Soheil Kheirabadi" />
-    <meta property="og:description" content="Assignment 2 — BodyGame [A.I Assisted] — a webcam game by Soheil Kheirabadi (TH45M0NK) for IAT 806 at SIAT, Simon Fraser University. Your body makes the nodes, the nodes make sacred geometry." />
+    <meta property="og:description" content="Assignment 2 — BodyGame [A.I Assisted] — a webcam game by Soheil Kheirabadi (TH45M0NK) for IAT 806 at SIAT, Simon Fraser University. Your body makes the nodes, and the nodes join into a network." />
     <meta property="og:url" content="https://th45m0nk.github.io/projects/iat-806/assignment2-bodygame/" />
     <meta property="og:image" content="https://th45m0nk.github.io/storage/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -26,7 +26,6 @@
     <script src="https://unpkg.com/ml5@1/dist/ml5.min.js"></script>
     <!-- Your code. Keep this line last. -->
     <script src="Ball.js"></script>
-    <script src="Geometry.js"></script>
     <script src="sketch.js"></script>
   </head>
   <body>
@@ -56,16 +55,11 @@
       <a class="back" href="../index.html">&larr; IAT 806</a>
 
       <h1>Assignment 2 — BodyGame [A.I Assisted]</h1>
-      <p class="tagline">your body makes the nodes, the nodes make the geometry · ml5.js + p5.js</p>
+      <p class="tagline">your body makes the nodes, the nodes make a network · ml5.js + p5.js</p>
 
       <div id="sketch-holder"></div>
-      <p>Allow the camera, then step in front of it. The places where you are make glowing nodes, and the nodes join into a shape.</p>
-      <ul>
-        <li>Make exactly the right number of nodes and hold still: 3 triangle, 4 tetrahedron, 6 hexagon (keep holding and it lifts into an octahedron), 8 cube, 12 icosahedron, 13 Metatron's cube, 20 dodecahedron, 30 or more E8.</li>
-        <li>Step closer or open your arms for more nodes. Step back for fewer.</li>
-        <li>Harder geometries give more points, and finding a new one gives double.</li>
-        <li>No camera? Hold the mouse down and paint nodes. Up and down arrows change how far apart the nodes are. R starts again.</li>
-      </ul>
+      <p>Allow the camera, then step in front of it. The places where you are make glowing nodes, and the nodes join into a network. Your score is the most nodes you made at the same time.</p>
+      <p>Step closer or open your arms for more nodes. No camera? Hold the mouse down and paint nodes. Press R to start again.</p>
     </main>
 
     <footer>
