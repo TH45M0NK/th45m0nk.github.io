@@ -202,8 +202,7 @@ function showWords() {
 function nameOf(n) {
   if (n <= 3) return "Triangle";
   if (n <= 4) return "Tetrahedron";
-  if (n <= 6) return "Hexagon";
-  if (n <= 12) return "Platonic solid";
-  if (n <= 18) return "Metatron's Cube";
-  return "E8";
+  if (n <= 8) return "Hexagon";
+  if (n <= 16) return "Metatron's Cube";
+  return "E8-inspired";
 }
