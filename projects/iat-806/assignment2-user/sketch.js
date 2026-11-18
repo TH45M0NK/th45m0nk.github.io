@@ -122,7 +122,10 @@ function measureOutline() {
   for (let i = 0; i < numRays; i++) {
     let angle = (TWO_PI * i) / numRays;
     let r = 0;
-    while (r < width && isBody(centerX + cos(angle) * r, centerY + sin(angle) * r)) {
+    while (
+      r < width &&
+      isBody(centerX + cos(angle) * r, centerY + sin(angle) * r)
+    ) {
       r += 4;
     }
     rough[i] = r;
@@ -130,7 +133,11 @@ function measureOutline() {
 
   // the edge of the mask shakes a little, so each distance is averaged with its two neighbours
   for (let i = 0; i < numRays; i++) {
-    radii[i] = (rough[(i + numRays - 1) % numRays] + rough[i] + rough[(i + 1) % numRays]) / 3;
+    radii[i] =
+      (rough[(i + numRays - 1) % numRays] +
+        rough[i] +
+        rough[(i + 1) % numRays]) /
+      3;
   }
 
   // add up how much the distance changes from one ray to the next.
@@ -154,7 +161,8 @@ function updateBalls() {
   let numBalls = round(map(complexity, 0, 1, minBalls, maxBalls));
 
   // new balls are born in your middle and slide out. extra balls are removed.
-  while (balls.length < numBalls) balls.push(new Ball(centerX, centerY, color(255), 8));
+  while (balls.length < numBalls)
+    balls.push(new Ball(centerX, centerY, color(255), 8));
   while (balls.length > numBalls) balls.pop();
 
   for (let i = 0; i < balls.length; i++) {
@@ -199,7 +207,8 @@ function drawLinks() {
 function isInside(a, b) {
   let steps = ceil(dist(a.x, a.y, b.x, b.y) / 8);
   for (let i = 0; i <= steps; i++) {
-    if (!isBody(lerp(a.x, b.x, i / steps), lerp(a.y, b.y, i / steps))) return false;
+    if (!isBody(lerp(a.x, b.x, i / steps), lerp(a.y, b.y, i / steps)))
+      return false;
   }
   return true;
 }
@@ -247,7 +256,12 @@ function showButton() {
 }
 
 function mousePressed() {
-  if (mouseX > buttonX && mouseX < buttonX + buttonW && mouseY > buttonY && mouseY < buttonY + buttonH) {
+  if (
+    mouseX > buttonX &&
+    mouseX < buttonX + buttonW &&
+    mouseY > buttonY &&
+    mouseY < buttonY + buttonH
+  ) {
     score = 0;
     found = [];
     jagged = 0;
