@@ -230,6 +230,7 @@ function giveScore() {
 function showWords() {
   noStroke();
   fill(255);
+  textFont("sans-serif");
   textSize(11);
   textAlign(LEFT, TOP);
   text("SCORE " + nf(score, 5), 20, 20);
