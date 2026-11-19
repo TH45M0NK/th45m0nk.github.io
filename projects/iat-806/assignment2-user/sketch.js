@@ -192,7 +192,7 @@ function drawOutline() {
 function drawLinks() {
   let reach = 1 + floor(complexity * (balls.length / 2 - 1));
   stroke(255, 170);
-  strokeWeight(1);
+  strokeWeight(4);
   for (let i = 0; i < balls.length; i++) {
     for (let step = 1; step <= reach; step++) {
       let other = balls[(i + step) % balls.length];
