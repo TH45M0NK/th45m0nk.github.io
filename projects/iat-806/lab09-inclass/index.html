@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Week 9</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 640px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+      input,
+      textarea,
+      button {
+        display: block;
+        width: 100%;
+        margin-bottom: 12px;
+        font: inherit;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      pre {
+        background: #f2f2f2;
+        padding: 12px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Hello world</p>
+    <h1>Week 9</h1>
+
+    <!-- Paste your key here. Never type it into your code: this repo is on GitHub. -->
+    <input
+      id="key"
+      type="password"
+      placeholder="OpenRouter API key (sk-or-...)"
+      autocomplete="new-password"
+    />
+    <input id="emotion" placeholder="your AI's personality" />
+    <textarea id="question" rows="3" placeholder="Your prompt"></textarea>
+    <button id="send">Send</button>
+
+    <pre id="output"></pre>
+
+    <script src="agent.js"></script>
+  </body>
+</html>
