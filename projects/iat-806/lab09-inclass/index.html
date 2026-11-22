@@ -1,16 +1,28 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Week 9</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="../../../favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="../../../favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="../../../apple-touch-icon.png" />
+    <title>Lab 09 — In-class — Soheil Kheirabadi</title>
+    <meta name="description" content="Lab 09 — In-class — an AI chat project by Soheil Kheirabadi (TH45M0NK) for IAT 806 at SIAT, Simon Fraser University." />
+    <meta name="author" content="Soheil Kheirabadi" />
+    <link rel="canonical" href="https://th45m0nk.github.io/projects/iat-806/lab09-inclass/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Soheil Kheirabadi — TH45M0NK" />
+    <meta property="og:title" content="Lab 09 — In-class — Soheil Kheirabadi" />
+    <meta property="og:description" content="Lab 09 — In-class — an AI chat project by Soheil Kheirabadi (TH45M0NK) for IAT 806 at SIAT, Simon Fraser University." />
+    <meta property="og:url" content="https://th45m0nk.github.io/projects/iat-806/lab09-inclass/" />
+    <meta property="og:image" content="https://th45m0nk.github.io/storage/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Three folders deep, so three levels up to the stylesheet -->
+    <link rel="stylesheet" href="../../../style.css" />
+
+    <!-- the form and the answer box need a little style -->
     <style>
-      body {
-        font-family: system-ui, sans-serif;
-        max-width: 640px;
-        margin: 40px auto;
-        padding: 0 16px;
-      }
       input,
       textarea,
       button {
@@ -22,29 +34,60 @@
         box-sizing: border-box;
       }
       pre {
-        background: #f2f2f2;
         padding: 12px;
         white-space: pre-wrap;
       }
     </style>
+
+    <!-- Your code. agent.js talks to the AI. -->
+    <script src="agent.js" defer></script>
   </head>
   <body>
-    <p>Hello world</p>
-    <h1>Week 9</h1>
+    <header>
+      <a class="site-name" href="../../../index.html">TH45M0NK</a>
+      <nav>
+        <a href="../../../index.html">Home</a>
+        <div class="nav-drop">
+          <a href="../../../projects/index.html" aria-current="page">Projects</a>
+          <div class="nav-sub">
+            <a href="../../../projects/siat/index.html">SIAT</a>
+            <a href="../../../projects/immersive/index.html">Immersive</a>
+            <a href="../../../projects/cgi-vfx/index.html">CGI/VFX</a>
+            <a href="../../../projects/graphic-design/index.html">Graphic Design</a>
+            <a href="../../../projects/photography/index.html">Photography</a>
+            <a href="../../../projects/publications/index.html">Publications</a>
+          </div>
+        </div>
+        <a href="../../../cv/index.html">CV</a>
+        <span class="nav-divider" aria-hidden="true"></span>
+        <a href="https://www.youtube.com/@th45m0nk" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/th45m0nk/" target="_blank" rel="noopener">IG</a>
+      </nav>
+    </header>
 
-    <!-- Paste your key here. Never type it into your code: this repo is on GitHub. -->
-    <input
-      id="key"
-      type="password"
-      placeholder="OpenRouter API key (sk-or-...)"
-      autocomplete="new-password"
-    />
-    <input id="emotion" placeholder="your AI's personality" />
-    <textarea id="question" rows="3" placeholder="Your prompt"></textarea>
-    <button id="send">Send</button>
+    <main>
+      <a class="back" href="../index.html">&larr; IAT 806</a>
 
-    <pre id="output"></pre>
+      <h1>Lab 09 — In-class</h1>
+      <p class="tagline">an AI with a personality · OpenRouter</p>
 
-    <script src="agent.js"></script>
+      <p>Paste your own OpenRouter key, give the AI a personality, then ask it a question. The key stays in your browser and is not saved anywhere.</p>
+
+      <input
+        id="key"
+        type="password"
+        placeholder="OpenRouter API key (sk-or-...)"
+        autocomplete="new-password"
+      />
+      <input id="emotion" placeholder="your AI's personality" />
+      <textarea id="question" rows="3" placeholder="Your prompt"></textarea>
+      <button id="send">Send</button>
+
+      <pre id="output"></pre>
+    </main>
+
+    <footer>
+      <p><a href="../index.html">&larr; Back to IAT 806</a></p>
+    </footer>
   </body>
 </html>
